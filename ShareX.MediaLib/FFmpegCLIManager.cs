@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -36,11 +38,6 @@ namespace ShareX.MediaLib
 {
     public class FFmpegCLIManager : ExternalCLIManager
     {
-        public const string SourceNone = "None";
-        public const string SourceGDIGrab = "GDI grab";
-        public const string SourceVideoDevice = "screen-capture-recorder";
-        public const string SourceAudioDevice = "virtual-audio-capturer";
-
         public const int x264_min = 0;
         public const int x264_max = 51;
         public const int x265_min = 0;
@@ -49,6 +46,8 @@ namespace ShareX.MediaLib
         public const int vp8_max = 63;
         public const int vp9_min = 0;
         public const int vp9_max = 63;
+        public const int av1_min = 0;
+        public const int av1_max = 63;
         public const int xvid_min = 1;
         public const int xvid_max = 31;
         public const int mp3_min = 0;
@@ -93,10 +92,7 @@ namespace ShareX.MediaLib
             bool result = errorCode == 0;
             if (!result && ShowError)
             {
-                using (OutputBox outputBox = new OutputBox(Output.ToString(), Resources.FFmpegError))
-                {
-                    outputBox.ShowDialog();
-                }
+                OutputBox.Show(Output.ToString(), Resources.FFmpegError, true);
             }
             return result;
         }
@@ -130,7 +126,7 @@ namespace ShareX.MediaLib
                 {
                     Output.AppendLine(data);
 
-                    if (!IsEncoding && data.Contains("Press [q] to stop", StringComparison.InvariantCultureIgnoreCase))
+                    if (!IsEncoding && data.Contains("Press [q] to stop", StringComparison.OrdinalIgnoreCase))
                     {
                         IsEncoding = true;
 
@@ -187,7 +183,7 @@ namespace ShareX.MediaLib
             VideoInfo videoInfo = new VideoInfo();
             videoInfo.FilePath = videoPath;
 
-            Run($"-i \"{videoPath}\" -hide_banner");
+            Run($"-i \"{videoPath}\"");
             string output = Output.ToString();
 
             Match matchInput = Regex.Match(output, @"Duration: (?<Duration>\d{2}:\d{2}:\d{2}\.\d{2}),.+?start: (?<Start>\d+\.\d+),.+?bitrate: (?<Bitrate>\d+) kb/s",
@@ -233,20 +229,19 @@ namespace ShareX.MediaLib
 
             string output = Output.ToString();
             string[] lines = output.Lines();
-            bool isVideo = true;
-            Regex regex = new Regex(@"\[dshow @ \w+\]  ""(.+)""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+            bool isAudio = false;
+            Regex regex = new Regex(@"\[dshow @ \w+\] +""(.+)""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
             foreach (string line in lines)
             {
-                if (line.Contains("] DirectShow video devices", StringComparison.InvariantCulture))
+                if (line.Contains("] DirectShow video devices"))
                 {
-                    isVideo = true;
+                    isAudio = false;
                     continue;
                 }
-
-                if (line.Contains("] DirectShow audio devices", StringComparison.InvariantCulture))
+                else if (line.Contains("] DirectShow audio devices"))
                 {
-                    isVideo = false;
+                    isAudio = true;
                     continue;
                 }
 
@@ -254,20 +249,59 @@ namespace ShareX.MediaLib
 
                 if (match.Success)
                 {
-                    string value = match.Groups[1].Value;
-
-                    if (isVideo)
+                    if (line.EndsWith("\" (video)"))
                     {
-                        devices.VideoDevices.Add(value);
+                        isAudio = false;
+                    }
+                    else if (line.EndsWith("\" (audio)"))
+                    {
+                        isAudio = true;
+                    }
+
+                    string deviceName = match.Groups[1].Value;
+
+                    if (isAudio)
+                    {
+                        devices.AudioDevices.Add(deviceName);
                     }
                     else
                     {
-                        devices.AudioDevices.Add(value);
+                        devices.VideoDevices.Add(deviceName);
                     }
                 }
             }
 
             return devices;
+        }
+
+        public void ConcatenateVideos(string[] inputFiles, string outputFile, bool autoDeleteInputFiles = false)
+        {
+            string listFile = outputFile + ".txt";
+            string contents = string.Join(Environment.NewLine, inputFiles.Select(inputFile => $"file '{inputFile}'"));
+            File.WriteAllText(listFile, contents);
+
+            try
+            {
+                bool result = Run($"-f concat -safe 0 -i \"{listFile}\" -c copy \"{outputFile}\"");
+
+                if (result && autoDeleteInputFiles)
+                {
+                    foreach (string inputFile in inputFiles)
+                    {
+                        if (File.Exists(inputFile))
+                        {
+                            File.Delete(inputFile);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (File.Exists(listFile))
+                {
+                    File.Delete(listFile);
+                }
+            }
         }
     }
 }

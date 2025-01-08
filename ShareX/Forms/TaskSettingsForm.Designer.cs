@@ -40,6 +40,7 @@
             this.cmsTask = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tcTaskSettings = new System.Windows.Forms.TabControl();
             this.tpTask = new System.Windows.Forms.TabPage();
+            this.lblTask = new System.Windows.Forms.Label();
             this.btnScreenshotsFolderBrowse = new System.Windows.Forms.Button();
             this.txtScreenshotsFolder = new System.Windows.Forms.TextBox();
             this.cbOverrideScreenshotsFolder = new System.Windows.Forms.CheckBox();
@@ -62,6 +63,10 @@
             this.tpGeneralMain = new System.Windows.Forms.TabPage();
             this.cbOverrideGeneralSettings = new System.Windows.Forms.CheckBox();
             this.tpNotifications = new System.Windows.Forms.TabPage();
+            this.btnCustomActionCompletedSoundPath = new System.Windows.Forms.Button();
+            this.txtCustomActionCompletedSoundPath = new System.Windows.Forms.TextBox();
+            this.cbUseCustomActionCompletedSound = new System.Windows.Forms.CheckBox();
+            this.cbPlaySoundAfterAction = new System.Windows.Forms.CheckBox();
             this.cbShowToastNotificationAfterTaskCompleted = new System.Windows.Forms.CheckBox();
             this.btnCustomErrorSoundPath = new System.Windows.Forms.Button();
             this.btnCustomTaskCompletedSoundPath = new System.Windows.Forms.Button();
@@ -73,6 +78,7 @@
             this.cbUseCustomTaskCompletedSound = new System.Windows.Forms.CheckBox();
             this.cbUseCustomCaptureSound = new System.Windows.Forms.CheckBox();
             this.gbToastWindow = new System.Windows.Forms.GroupBox();
+            this.cbToastWindowAutoHide = new System.Windows.Forms.CheckBox();
             this.lblToastWindowFadeDurationSeconds = new System.Windows.Forms.Label();
             this.lblToastWindowDurationSeconds = new System.Windows.Forms.Label();
             this.lblToastWindowSizeX = new System.Windows.Forms.Label();
@@ -83,6 +89,7 @@
             this.nudToastWindowSizeWidth = new System.Windows.Forms.NumericUpDown();
             this.cbToastWindowPlacement = new System.Windows.Forms.ComboBox();
             this.nudToastWindowFadeDuration = new System.Windows.Forms.NumericUpDown();
+            this.cbDisableNotificationsOnFullscreen = new System.Windows.Forms.CheckBox();
             this.nudToastWindowDuration = new System.Windows.Forms.NumericUpDown();
             this.lblToastWindowMiddleClickAction = new System.Windows.Forms.Label();
             this.lblToastWindowRightClickAction = new System.Windows.Forms.Label();
@@ -91,8 +98,6 @@
             this.lblToastWindowPlacement = new System.Windows.Forms.Label();
             this.lblToastWindowFadeDuration = new System.Windows.Forms.Label();
             this.lblToastWindowDuration = new System.Windows.Forms.Label();
-            this.cbDisableNotificationsOnFullscreen = new System.Windows.Forms.CheckBox();
-            this.cbDisableNotifications = new System.Windows.Forms.CheckBox();
             this.cbPlaySoundAfterCapture = new System.Windows.Forms.CheckBox();
             this.cbPlaySoundAfterUpload = new System.Windows.Forms.CheckBox();
             this.tpImage = new System.Windows.Forms.TabPage();
@@ -116,6 +121,7 @@
             this.cbImageGIFQuality = new System.Windows.Forms.ComboBox();
             this.cbOverrideImageSettings = new System.Windows.Forms.CheckBox();
             this.tpEffects = new System.Windows.Forms.TabPage();
+            this.cbUseRandomImageEffect = new System.Windows.Forms.CheckBox();
             this.lblImageEffectsNote = new System.Windows.Forms.Label();
             this.cbShowImageEffectsWindowAfterCapture = new System.Windows.Forms.CheckBox();
             this.cbImageEffectOnlyRegionCapture = new System.Windows.Forms.CheckBox();
@@ -133,6 +139,8 @@
             this.tcCapture = new System.Windows.Forms.TabControl();
             this.tpCaptureGeneral = new System.Windows.Forms.TabPage();
             this.pCapture = new System.Windows.Forms.Panel();
+            this.txtCaptureCustomWindow = new System.Windows.Forms.TextBox();
+            this.lblCaptureCustomWindow = new System.Windows.Forms.Label();
             this.lblScreenshotDelay = new System.Windows.Forms.Label();
             this.btnCaptureCustomRegionSelectRectangle = new System.Windows.Forms.Button();
             this.lblCaptureCustomRegion = new System.Windows.Forms.Label();
@@ -155,6 +163,12 @@
             this.nudCaptureShadowOffset = new System.Windows.Forms.NumericUpDown();
             this.cbOverrideCaptureSettings = new System.Windows.Forms.CheckBox();
             this.tpRegionCapture = new System.Windows.Forms.TabPage();
+            this.lblRegionCaptureBackgroundDimStrengthHint = new System.Windows.Forms.Label();
+            this.nudRegionCaptureBackgroundDimStrength = new System.Windows.Forms.NumericUpDown();
+            this.lblRegionCaptureBackgroundDimStrength = new System.Windows.Forms.Label();
+            this.cbRegionCaptureActiveMonitorMode = new System.Windows.Forms.CheckBox();
+            this.nudRegionCaptureFPSLimit = new System.Windows.Forms.NumericUpDown();
+            this.lblRegionCaptureFPSLimit = new System.Windows.Forms.Label();
             this.cbRegionCaptureShowFPS = new System.Windows.Forms.CheckBox();
             this.flpRegionCaptureFixedSize = new System.Windows.Forms.FlowLayoutPanel();
             this.lblRegionCaptureFixedSizeWidth = new System.Windows.Forms.Label();
@@ -191,7 +205,6 @@
             this.RegionCaptureSnapSizesHeight = new System.Windows.Forms.Label();
             this.nudRegionCaptureSnapSizesWidth = new System.Windows.Forms.NumericUpDown();
             this.lblRegionCaptureSnapSizesWidth = new System.Windows.Forms.Label();
-            this.cbRegionCaptureUseDimming = new System.Windows.Forms.CheckBox();
             this.txtRegionCaptureCustomInfoText = new System.Windows.Forms.TextBox();
             this.nudRegionCaptureMagnifierPixelCount = new System.Windows.Forms.NumericUpDown();
             this.nudRegionCaptureMagnifierPixelSize = new System.Windows.Forms.NumericUpDown();
@@ -212,8 +225,9 @@
             this.nudGIFFPS = new System.Windows.Forms.NumericUpDown();
             this.lblGIFFPS = new System.Windows.Forms.Label();
             this.tpOCR = new System.Windows.Forms.TabPage();
+            this.btnCaptureOCRHelp = new System.Windows.Forms.Button();
             this.cbCaptureOCRAutoCopy = new System.Windows.Forms.CheckBox();
-            this.cbCaptureOCRProcessOnLoad = new System.Windows.Forms.CheckBox();
+            this.cbCloseWindowAfterOpenServiceLink = new System.Windows.Forms.CheckBox();
             this.cbCaptureOCRSilent = new System.Windows.Forms.CheckBox();
             this.lblOCRDefaultLanguage = new System.Windows.Forms.Label();
             this.cbCaptureOCRDefaultLanguage = new System.Windows.Forms.ComboBox();
@@ -326,6 +340,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudScreenshotDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCaptureShadowOffset)).BeginInit();
             this.tpRegionCapture.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRegionCaptureBackgroundDimStrength)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRegionCaptureFPSLimit)).BeginInit();
             this.flpRegionCaptureFixedSize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRegionCaptureFixedSizeWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRegionCaptureFixedSizeHeight)).BeginInit();
@@ -420,6 +436,7 @@
             // tpTask
             // 
             this.tpTask.BackColor = System.Drawing.SystemColors.Window;
+            this.tpTask.Controls.Add(this.lblTask);
             this.tpTask.Controls.Add(this.btnScreenshotsFolderBrowse);
             this.tpTask.Controls.Add(this.txtScreenshotsFolder);
             this.tpTask.Controls.Add(this.cbOverrideScreenshotsFolder);
@@ -438,6 +455,11 @@
             this.tpTask.Controls.Add(this.lblDescription);
             resources.ApplyResources(this.tpTask, "tpTask");
             this.tpTask.Name = "tpTask";
+            // 
+            // lblTask
+            // 
+            resources.ApplyResources(this.lblTask, "lblTask");
+            this.lblTask.Name = "lblTask";
             // 
             // btnScreenshotsFolderBrowse
             // 
@@ -556,6 +578,7 @@
             // 
             // btnTask
             // 
+            this.btnTask.Image = global::ShareX.Properties.Resources.gear;
             resources.ApplyResources(this.btnTask, "btnTask");
             this.btnTask.Menu = this.cmsTask;
             this.btnTask.Name = "btnTask";
@@ -595,6 +618,10 @@
             // 
             // tpNotifications
             // 
+            this.tpNotifications.Controls.Add(this.btnCustomActionCompletedSoundPath);
+            this.tpNotifications.Controls.Add(this.txtCustomActionCompletedSoundPath);
+            this.tpNotifications.Controls.Add(this.cbUseCustomActionCompletedSound);
+            this.tpNotifications.Controls.Add(this.cbPlaySoundAfterAction);
             this.tpNotifications.Controls.Add(this.cbShowToastNotificationAfterTaskCompleted);
             this.tpNotifications.Controls.Add(this.btnCustomErrorSoundPath);
             this.tpNotifications.Controls.Add(this.btnCustomTaskCompletedSoundPath);
@@ -606,13 +633,38 @@
             this.tpNotifications.Controls.Add(this.cbUseCustomTaskCompletedSound);
             this.tpNotifications.Controls.Add(this.cbUseCustomCaptureSound);
             this.tpNotifications.Controls.Add(this.gbToastWindow);
-            this.tpNotifications.Controls.Add(this.cbDisableNotificationsOnFullscreen);
-            this.tpNotifications.Controls.Add(this.cbDisableNotifications);
             this.tpNotifications.Controls.Add(this.cbPlaySoundAfterCapture);
             this.tpNotifications.Controls.Add(this.cbPlaySoundAfterUpload);
             resources.ApplyResources(this.tpNotifications, "tpNotifications");
             this.tpNotifications.Name = "tpNotifications";
             this.tpNotifications.UseVisualStyleBackColor = true;
+            // 
+            // btnCustomActionCompletedSoundPath
+            // 
+            resources.ApplyResources(this.btnCustomActionCompletedSoundPath, "btnCustomActionCompletedSoundPath");
+            this.btnCustomActionCompletedSoundPath.Name = "btnCustomActionCompletedSoundPath";
+            this.btnCustomActionCompletedSoundPath.UseVisualStyleBackColor = true;
+            this.btnCustomActionCompletedSoundPath.Click += new System.EventHandler(this.btnCustomActionCompletedSoundPath_Click);
+            // 
+            // txtCustomActionCompletedSoundPath
+            // 
+            resources.ApplyResources(this.txtCustomActionCompletedSoundPath, "txtCustomActionCompletedSoundPath");
+            this.txtCustomActionCompletedSoundPath.Name = "txtCustomActionCompletedSoundPath";
+            this.txtCustomActionCompletedSoundPath.TextChanged += new System.EventHandler(this.txtCustomActionCompletedSoundPath_TextChanged);
+            // 
+            // cbUseCustomActionCompletedSound
+            // 
+            resources.ApplyResources(this.cbUseCustomActionCompletedSound, "cbUseCustomActionCompletedSound");
+            this.cbUseCustomActionCompletedSound.Name = "cbUseCustomActionCompletedSound";
+            this.cbUseCustomActionCompletedSound.UseVisualStyleBackColor = true;
+            this.cbUseCustomActionCompletedSound.CheckedChanged += new System.EventHandler(this.cbUseCustomActionCompletedSound_CheckedChanged);
+            // 
+            // cbPlaySoundAfterAction
+            // 
+            resources.ApplyResources(this.cbPlaySoundAfterAction, "cbPlaySoundAfterAction");
+            this.cbPlaySoundAfterAction.Name = "cbPlaySoundAfterAction";
+            this.cbPlaySoundAfterAction.UseVisualStyleBackColor = true;
+            this.cbPlaySoundAfterAction.CheckedChanged += new System.EventHandler(this.cbPlaySoundAfterAction_CheckedChanged);
             // 
             // cbShowToastNotificationAfterTaskCompleted
             // 
@@ -683,6 +735,7 @@
             // 
             // gbToastWindow
             // 
+            this.gbToastWindow.Controls.Add(this.cbToastWindowAutoHide);
             this.gbToastWindow.Controls.Add(this.lblToastWindowFadeDurationSeconds);
             this.gbToastWindow.Controls.Add(this.lblToastWindowDurationSeconds);
             this.gbToastWindow.Controls.Add(this.lblToastWindowSizeX);
@@ -693,6 +746,7 @@
             this.gbToastWindow.Controls.Add(this.nudToastWindowSizeWidth);
             this.gbToastWindow.Controls.Add(this.cbToastWindowPlacement);
             this.gbToastWindow.Controls.Add(this.nudToastWindowFadeDuration);
+            this.gbToastWindow.Controls.Add(this.cbDisableNotificationsOnFullscreen);
             this.gbToastWindow.Controls.Add(this.nudToastWindowDuration);
             this.gbToastWindow.Controls.Add(this.lblToastWindowMiddleClickAction);
             this.gbToastWindow.Controls.Add(this.lblToastWindowRightClickAction);
@@ -704,6 +758,13 @@
             resources.ApplyResources(this.gbToastWindow, "gbToastWindow");
             this.gbToastWindow.Name = "gbToastWindow";
             this.gbToastWindow.TabStop = false;
+            // 
+            // cbToastWindowAutoHide
+            // 
+            resources.ApplyResources(this.cbToastWindowAutoHide, "cbToastWindowAutoHide");
+            this.cbToastWindowAutoHide.Name = "cbToastWindowAutoHide";
+            this.cbToastWindowAutoHide.UseVisualStyleBackColor = true;
+            this.cbToastWindowAutoHide.CheckedChanged += new System.EventHandler(this.cbToastWindowAutoHide_CheckedChanged);
             // 
             // lblToastWindowFadeDurationSeconds
             // 
@@ -796,6 +857,7 @@
             // 
             // nudToastWindowFadeDuration
             // 
+            this.nudToastWindowFadeDuration.DecimalPlaces = 1;
             resources.ApplyResources(this.nudToastWindowFadeDuration, "nudToastWindowFadeDuration");
             this.nudToastWindowFadeDuration.Maximum = new decimal(new int[] {
             30,
@@ -805,8 +867,16 @@
             this.nudToastWindowFadeDuration.Name = "nudToastWindowFadeDuration";
             this.nudToastWindowFadeDuration.ValueChanged += new System.EventHandler(this.nudToastWindowFadeDuration_ValueChanged);
             // 
+            // cbDisableNotificationsOnFullscreen
+            // 
+            resources.ApplyResources(this.cbDisableNotificationsOnFullscreen, "cbDisableNotificationsOnFullscreen");
+            this.cbDisableNotificationsOnFullscreen.Name = "cbDisableNotificationsOnFullscreen";
+            this.cbDisableNotificationsOnFullscreen.UseVisualStyleBackColor = true;
+            this.cbDisableNotificationsOnFullscreen.CheckedChanged += new System.EventHandler(this.cbDisableNotificationsOnFullscreen_CheckedChanged);
+            // 
             // nudToastWindowDuration
             // 
+            this.nudToastWindowDuration.DecimalPlaces = 1;
             resources.ApplyResources(this.nudToastWindowDuration, "nudToastWindowDuration");
             this.nudToastWindowDuration.Maximum = new decimal(new int[] {
             30,
@@ -850,20 +920,6 @@
             // 
             resources.ApplyResources(this.lblToastWindowDuration, "lblToastWindowDuration");
             this.lblToastWindowDuration.Name = "lblToastWindowDuration";
-            // 
-            // cbDisableNotificationsOnFullscreen
-            // 
-            resources.ApplyResources(this.cbDisableNotificationsOnFullscreen, "cbDisableNotificationsOnFullscreen");
-            this.cbDisableNotificationsOnFullscreen.Name = "cbDisableNotificationsOnFullscreen";
-            this.cbDisableNotificationsOnFullscreen.UseVisualStyleBackColor = true;
-            this.cbDisableNotificationsOnFullscreen.CheckedChanged += new System.EventHandler(this.cbDisableNotificationsOnFullscreen_CheckedChanged);
-            // 
-            // cbDisableNotifications
-            // 
-            resources.ApplyResources(this.cbDisableNotifications, "cbDisableNotifications");
-            this.cbDisableNotifications.Name = "cbDisableNotifications";
-            this.cbDisableNotifications.UseVisualStyleBackColor = true;
-            this.cbDisableNotifications.CheckedChanged += new System.EventHandler(this.cbDisableNotifications_CheckedChanged);
             // 
             // cbPlaySoundAfterCapture
             // 
@@ -1048,12 +1104,20 @@
             // tpEffects
             // 
             this.tpEffects.BackColor = System.Drawing.SystemColors.Window;
+            this.tpEffects.Controls.Add(this.cbUseRandomImageEffect);
             this.tpEffects.Controls.Add(this.lblImageEffectsNote);
             this.tpEffects.Controls.Add(this.cbShowImageEffectsWindowAfterCapture);
             this.tpEffects.Controls.Add(this.cbImageEffectOnlyRegionCapture);
             this.tpEffects.Controls.Add(this.btnImageEffects);
             resources.ApplyResources(this.tpEffects, "tpEffects");
             this.tpEffects.Name = "tpEffects";
+            // 
+            // cbUseRandomImageEffect
+            // 
+            resources.ApplyResources(this.cbUseRandomImageEffect, "cbUseRandomImageEffect");
+            this.cbUseRandomImageEffect.Name = "cbUseRandomImageEffect";
+            this.cbUseRandomImageEffect.UseVisualStyleBackColor = true;
+            this.cbUseRandomImageEffect.CheckedChanged += new System.EventHandler(this.cbUseRandomImageEffect_CheckedChanged);
             // 
             // lblImageEffectsNote
             // 
@@ -1177,6 +1241,8 @@
             // 
             // pCapture
             // 
+            this.pCapture.Controls.Add(this.txtCaptureCustomWindow);
+            this.pCapture.Controls.Add(this.lblCaptureCustomWindow);
             this.pCapture.Controls.Add(this.lblScreenshotDelay);
             this.pCapture.Controls.Add(this.btnCaptureCustomRegionSelectRectangle);
             this.pCapture.Controls.Add(this.lblCaptureCustomRegion);
@@ -1199,6 +1265,17 @@
             this.pCapture.Controls.Add(this.nudCaptureShadowOffset);
             resources.ApplyResources(this.pCapture, "pCapture");
             this.pCapture.Name = "pCapture";
+            // 
+            // txtCaptureCustomWindow
+            // 
+            resources.ApplyResources(this.txtCaptureCustomWindow, "txtCaptureCustomWindow");
+            this.txtCaptureCustomWindow.Name = "txtCaptureCustomWindow";
+            this.txtCaptureCustomWindow.TextChanged += new System.EventHandler(this.txtCaptureCustomWindow_TextChanged);
+            // 
+            // lblCaptureCustomWindow
+            // 
+            resources.ApplyResources(this.lblCaptureCustomWindow, "lblCaptureCustomWindow");
+            this.lblCaptureCustomWindow.Name = "lblCaptureCustomWindow";
             // 
             // lblScreenshotDelay
             // 
@@ -1386,6 +1463,12 @@
             // tpRegionCapture
             // 
             this.tpRegionCapture.BackColor = System.Drawing.SystemColors.Window;
+            this.tpRegionCapture.Controls.Add(this.lblRegionCaptureBackgroundDimStrengthHint);
+            this.tpRegionCapture.Controls.Add(this.nudRegionCaptureBackgroundDimStrength);
+            this.tpRegionCapture.Controls.Add(this.lblRegionCaptureBackgroundDimStrength);
+            this.tpRegionCapture.Controls.Add(this.cbRegionCaptureActiveMonitorMode);
+            this.tpRegionCapture.Controls.Add(this.nudRegionCaptureFPSLimit);
+            this.tpRegionCapture.Controls.Add(this.lblRegionCaptureFPSLimit);
             this.tpRegionCapture.Controls.Add(this.cbRegionCaptureShowFPS);
             this.tpRegionCapture.Controls.Add(this.flpRegionCaptureFixedSize);
             this.tpRegionCapture.Controls.Add(this.cbRegionCaptureIsFixedSize);
@@ -1412,12 +1495,55 @@
             this.tpRegionCapture.Controls.Add(this.lblRegionCaptureMouseRightClickAction);
             this.tpRegionCapture.Controls.Add(this.cbRegionCaptureMultiRegionMode);
             this.tpRegionCapture.Controls.Add(this.pRegionCaptureSnapSizes);
-            this.tpRegionCapture.Controls.Add(this.cbRegionCaptureUseDimming);
             this.tpRegionCapture.Controls.Add(this.txtRegionCaptureCustomInfoText);
             this.tpRegionCapture.Controls.Add(this.nudRegionCaptureMagnifierPixelCount);
             this.tpRegionCapture.Controls.Add(this.nudRegionCaptureMagnifierPixelSize);
             resources.ApplyResources(this.tpRegionCapture, "tpRegionCapture");
             this.tpRegionCapture.Name = "tpRegionCapture";
+            // 
+            // lblRegionCaptureBackgroundDimStrengthHint
+            // 
+            resources.ApplyResources(this.lblRegionCaptureBackgroundDimStrengthHint, "lblRegionCaptureBackgroundDimStrengthHint");
+            this.lblRegionCaptureBackgroundDimStrengthHint.Name = "lblRegionCaptureBackgroundDimStrengthHint";
+            // 
+            // nudRegionCaptureBackgroundDimStrength
+            // 
+            resources.ApplyResources(this.nudRegionCaptureBackgroundDimStrength, "nudRegionCaptureBackgroundDimStrength");
+            this.nudRegionCaptureBackgroundDimStrength.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.nudRegionCaptureBackgroundDimStrength.Name = "nudRegionCaptureBackgroundDimStrength";
+            this.nudRegionCaptureBackgroundDimStrength.ValueChanged += new System.EventHandler(this.nudRegionCaptureBackgroundDimStrength_ValueChanged);
+            // 
+            // lblRegionCaptureBackgroundDimStrength
+            // 
+            resources.ApplyResources(this.lblRegionCaptureBackgroundDimStrength, "lblRegionCaptureBackgroundDimStrength");
+            this.lblRegionCaptureBackgroundDimStrength.Name = "lblRegionCaptureBackgroundDimStrength";
+            // 
+            // cbRegionCaptureActiveMonitorMode
+            // 
+            resources.ApplyResources(this.cbRegionCaptureActiveMonitorMode, "cbRegionCaptureActiveMonitorMode");
+            this.cbRegionCaptureActiveMonitorMode.Name = "cbRegionCaptureActiveMonitorMode";
+            this.cbRegionCaptureActiveMonitorMode.UseVisualStyleBackColor = true;
+            this.cbRegionCaptureActiveMonitorMode.CheckedChanged += new System.EventHandler(this.cbRegionCaptureActiveMonitorMode_CheckedChanged);
+            // 
+            // nudRegionCaptureFPSLimit
+            // 
+            resources.ApplyResources(this.nudRegionCaptureFPSLimit, "nudRegionCaptureFPSLimit");
+            this.nudRegionCaptureFPSLimit.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.nudRegionCaptureFPSLimit.Name = "nudRegionCaptureFPSLimit";
+            this.nudRegionCaptureFPSLimit.ValueChanged += new System.EventHandler(this.nudRegionCaptureFPSLimit_ValueChanged);
+            // 
+            // lblRegionCaptureFPSLimit
+            // 
+            resources.ApplyResources(this.lblRegionCaptureFPSLimit, "lblRegionCaptureFPSLimit");
+            this.lblRegionCaptureFPSLimit.Name = "lblRegionCaptureFPSLimit";
             // 
             // cbRegionCaptureShowFPS
             // 
@@ -1724,13 +1850,6 @@
             resources.ApplyResources(this.lblRegionCaptureSnapSizesWidth, "lblRegionCaptureSnapSizesWidth");
             this.lblRegionCaptureSnapSizesWidth.Name = "lblRegionCaptureSnapSizesWidth";
             // 
-            // cbRegionCaptureUseDimming
-            // 
-            resources.ApplyResources(this.cbRegionCaptureUseDimming, "cbRegionCaptureUseDimming");
-            this.cbRegionCaptureUseDimming.Name = "cbRegionCaptureUseDimming";
-            this.cbRegionCaptureUseDimming.UseVisualStyleBackColor = true;
-            this.cbRegionCaptureUseDimming.CheckedChanged += new System.EventHandler(this.cbRegionCaptureUseDimming_CheckedChanged);
-            // 
             // txtRegionCaptureCustomInfoText
             // 
             resources.ApplyResources(this.txtRegionCaptureCustomInfoText, "txtRegionCaptureCustomInfoText");
@@ -1937,14 +2056,23 @@
             // 
             // tpOCR
             // 
+            this.tpOCR.Controls.Add(this.btnCaptureOCRHelp);
             this.tpOCR.Controls.Add(this.cbCaptureOCRAutoCopy);
-            this.tpOCR.Controls.Add(this.cbCaptureOCRProcessOnLoad);
+            this.tpOCR.Controls.Add(this.cbCloseWindowAfterOpenServiceLink);
             this.tpOCR.Controls.Add(this.cbCaptureOCRSilent);
             this.tpOCR.Controls.Add(this.lblOCRDefaultLanguage);
             this.tpOCR.Controls.Add(this.cbCaptureOCRDefaultLanguage);
             resources.ApplyResources(this.tpOCR, "tpOCR");
             this.tpOCR.Name = "tpOCR";
             this.tpOCR.UseVisualStyleBackColor = true;
+            // 
+            // btnCaptureOCRHelp
+            // 
+            this.btnCaptureOCRHelp.Image = global::ShareX.Properties.Resources.question;
+            resources.ApplyResources(this.btnCaptureOCRHelp, "btnCaptureOCRHelp");
+            this.btnCaptureOCRHelp.Name = "btnCaptureOCRHelp";
+            this.btnCaptureOCRHelp.UseVisualStyleBackColor = true;
+            this.btnCaptureOCRHelp.Click += new System.EventHandler(this.btnCaptureOCRHelp_Click);
             // 
             // cbCaptureOCRAutoCopy
             // 
@@ -1953,12 +2081,12 @@
             this.cbCaptureOCRAutoCopy.UseVisualStyleBackColor = true;
             this.cbCaptureOCRAutoCopy.CheckedChanged += new System.EventHandler(this.cbCaptureOCRAutoCopy_CheckedChanged);
             // 
-            // cbCaptureOCRProcessOnLoad
+            // cbCloseWindowAfterOpenServiceLink
             // 
-            resources.ApplyResources(this.cbCaptureOCRProcessOnLoad, "cbCaptureOCRProcessOnLoad");
-            this.cbCaptureOCRProcessOnLoad.Name = "cbCaptureOCRProcessOnLoad";
-            this.cbCaptureOCRProcessOnLoad.UseVisualStyleBackColor = true;
-            this.cbCaptureOCRProcessOnLoad.CheckedChanged += new System.EventHandler(this.cbCaptureOCRProcessOnLoad_CheckedChanged);
+            resources.ApplyResources(this.cbCloseWindowAfterOpenServiceLink, "cbCloseWindowAfterOpenServiceLink");
+            this.cbCloseWindowAfterOpenServiceLink.Name = "cbCloseWindowAfterOpenServiceLink";
+            this.cbCloseWindowAfterOpenServiceLink.UseVisualStyleBackColor = true;
+            this.cbCloseWindowAfterOpenServiceLink.CheckedChanged += new System.EventHandler(this.cbCloseWindowAfterOpenServiceLink_CheckedChanged);
             // 
             // cbCaptureOCRSilent
             // 
@@ -2082,7 +2210,7 @@
             // 
             resources.ApplyResources(this.nudAutoIncrementNumber, "nudAutoIncrementNumber");
             this.nudAutoIncrementNumber.Maximum = new decimal(new int[] {
-            100000000,
+            1000000000,
             0,
             0,
             0});
@@ -2597,6 +2725,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudCaptureShadowOffset)).EndInit();
             this.tpRegionCapture.ResumeLayout(false);
             this.tpRegionCapture.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRegionCaptureBackgroundDimStrength)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRegionCaptureFPSLimit)).EndInit();
             this.flpRegionCaptureFixedSize.ResumeLayout(false);
             this.flpRegionCaptureFixedSize.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRegionCaptureFixedSizeWidth)).EndInit();
@@ -2796,7 +2926,6 @@
         private System.Windows.Forms.ComboBox cbRegionCaptureMouseRightClickAction;
         private System.Windows.Forms.CheckBox cbRegionCaptureDetectWindows;
         private System.Windows.Forms.CheckBox cbRegionCaptureDetectControls;
-        private System.Windows.Forms.CheckBox cbRegionCaptureUseDimming;
         private System.Windows.Forms.CheckBox cbRegionCaptureUseCustomInfoText;
         private System.Windows.Forms.TextBox txtRegionCaptureCustomInfoText;
         private System.Windows.Forms.Label lblRegionCaptureSnapSizes;
@@ -2851,8 +2980,8 @@
         private System.Windows.Forms.Label lblOCRDefaultLanguage;
         private System.Windows.Forms.ComboBox cbCaptureOCRDefaultLanguage;
         private System.Windows.Forms.CheckBox cbCaptureOCRSilent;
-        private System.Windows.Forms.CheckBox cbCaptureOCRProcessOnLoad;
         private System.Windows.Forms.CheckBox cbCaptureOCRAutoCopy;
+        private System.Windows.Forms.CheckBox cbCloseWindowAfterOpenServiceLink;
         private System.Windows.Forms.Label lblScreenshotDelay;
         private System.Windows.Forms.Label lblAutoIncrementNumber;
         private System.Windows.Forms.NumericUpDown nudAutoIncrementNumber;
@@ -2875,7 +3004,6 @@
         private System.Windows.Forms.TabPage tpGeneralMain;
         private System.Windows.Forms.TabPage tpNotifications;
         private System.Windows.Forms.CheckBox cbDisableNotificationsOnFullscreen;
-        private System.Windows.Forms.CheckBox cbDisableNotifications;
         private System.Windows.Forms.GroupBox gbToastWindow;
         private System.Windows.Forms.Label lblToastWindowLeftClickAction;
         private System.Windows.Forms.Label lblToastWindowSize;
@@ -2907,5 +3035,21 @@
         private System.Windows.Forms.Label lblToastWindowDurationSeconds;
         private System.Windows.Forms.Button btnActions;
         private System.Windows.Forms.CheckBox cbImageAutoJPEGQuality;
+        private System.Windows.Forms.Label lblTask;
+        private System.Windows.Forms.CheckBox cbToastWindowAutoHide;
+        private System.Windows.Forms.NumericUpDown nudRegionCaptureFPSLimit;
+        private System.Windows.Forms.Label lblRegionCaptureFPSLimit;
+        private System.Windows.Forms.CheckBox cbRegionCaptureActiveMonitorMode;
+        private System.Windows.Forms.Button btnCaptureOCRHelp;
+        private System.Windows.Forms.CheckBox cbUseRandomImageEffect;
+        private System.Windows.Forms.Label lblCaptureCustomWindow;
+        private System.Windows.Forms.TextBox txtCaptureCustomWindow;
+        private System.Windows.Forms.NumericUpDown nudRegionCaptureBackgroundDimStrength;
+        private System.Windows.Forms.Label lblRegionCaptureBackgroundDimStrength;
+        private System.Windows.Forms.Label lblRegionCaptureBackgroundDimStrengthHint;
+        private System.Windows.Forms.CheckBox cbPlaySoundAfterAction;
+        private System.Windows.Forms.Button btnCustomActionCompletedSoundPath;
+        private System.Windows.Forms.TextBox txtCustomActionCompletedSoundPath;
+        private System.Windows.Forms.CheckBox cbUseCustomActionCompletedSound;
     }
 }

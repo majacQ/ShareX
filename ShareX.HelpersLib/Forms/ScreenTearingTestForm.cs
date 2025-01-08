@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -52,13 +52,14 @@ namespace ShareX.HelpersLib
             Bounds = screenRectangle;
             Cursor = Cursors.Hand;
             FormBorderStyle = FormBorderStyle.None;
-            Icon = ShareXResources.Icon;
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             Text = "ShareX - Screen tearing test";
             ShowInTaskbar = false;
             TopMost = true;
 
             ResumeLayout(false);
+
+            ShareXResources.ApplyTheme(this, true);
 
             animationTime = Stopwatch.StartNew();
         }
@@ -68,18 +69,6 @@ namespace ShareX.HelpersLib
             this.ForceActivate();
 
             base.OnShown(e);
-        }
-
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                Close();
-            }
-            else
-            {
-                base.OnKeyUp(e);
-            }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)

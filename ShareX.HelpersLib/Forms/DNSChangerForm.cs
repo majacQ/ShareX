@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ namespace ShareX.HelpersLib
         public DNSChangerForm()
         {
             InitializeComponent();
-            ShareXResources.ApplyTheme(this);
+            ShareXResources.ApplyTheme(this, true);
 
             AddDNS(Resources.DNSChangerForm_DNSChangerForm_Manual);
             AddDNS("Google Public DNS", "8.8.8.8", "8.8.4.4"); // https://developers.google.com/speed/public-dns/
@@ -145,6 +145,16 @@ namespace ShareX.HelpersLib
             }
         }
 
+        private async void btnPingPrimary_Click(object sender, EventArgs e)
+        {
+            await SendPing(txtPreferredDNS.Text);
+        }
+
+        private async void btnPingSecondary_Click(object sender, EventArgs e)
+        {
+            await SendPing(txtAlternateDNS.Text);
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (cbAdapters.SelectedItem is AdapterInfo adapter)
@@ -195,17 +205,8 @@ namespace ShareX.HelpersLib
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             Close();
-        }
-
-        private async void btnPingPrimary_Click(object sender, EventArgs e)
-        {
-            await SendPing(txtPreferredDNS.Text);
-        }
-
-        private async void btnPingSecondary_Click(object sender, EventArgs e)
-        {
-            await SendPing(txtAlternateDNS.Text);
         }
     }
 }

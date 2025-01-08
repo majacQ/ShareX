@@ -139,9 +139,6 @@ Cliquez sur « Non » pour annuler la mise en ligne et désactiver la mise en li
   <data name="AutoCaptureForm_UpdateStatus_Timeleft___0_s___1____Total___2_" xml:space="preserve">
     <value>Temps restant : {0}s ({1}%) Total : {2}</value>
   </data>
-  <data name="AboutForm_AboutForm_Contributors" xml:space="preserve">
-    <value>Contributeurs</value>
-  </data>
   <data name="UploadManager_UploadURL_URL_to_download_from_and_upload" xml:space="preserve">
     <value>URL à télécharger et à mettre en ligne</value>
   </data>
@@ -162,9 +159,6 @@ Cliquez sur « Non » pour annuler la mise en ligne et désactiver la mise en li
   </data>
   <data name="UploadManager_IsUploadConfirmed_Upload_files" xml:space="preserve">
     <value>Mise en ligne de fichiers</value>
-  </data>
-  <data name="HotkeyManager_ShowFailedHotkeys_These_applications_could_be_conflicting_" xml:space="preserve">
-    <value>Ces applications pourraient être en conflit :</value>
   </data>
   <data name="TaskManager_task_UploadCompleted_Error" xml:space="preserve">
     <value>Erreur</value>
@@ -213,17 +207,8 @@ Veuillez exécuter ShareX en tant qu'administrateur pour changer le chemin du do
   <data name="TaskHelpers_OpenQuickScreenColorPicker_Copied_to_clipboard___0_" xml:space="preserve">
     <value>Copié dans le presse-papier : {0}</value>
   </data>
-  <data name="MainForm_UpdateMenu_Hide_menu" xml:space="preserve">
-    <value>Cacher le menu</value>
-  </data>
   <data name="TaskHelpers_TweetMessage_Unable_to_find_valid_Twitter_account_" xml:space="preserve">
     <value>Impossible de trouver un compte Twitter valide.</value>
-  </data>
-  <data name="MainForm_UpdateMenu_Show_menu" xml:space="preserve">
-    <value>Afficher le menu</value>
-  </data>
-  <data name="MainForm_UpdateMainWindowLayout_Show_columns" xml:space="preserve">
-    <value>Afficher les colonnes</value>
   </data>
   <data name="QuickTaskMenu_ShowMenu_Cancel" xml:space="preserve">
     <value>Annuler</value>
@@ -259,9 +244,6 @@ Veuillez sélectionner un raccourci différent ou quitter l'application en confl
   <data name="UploadManager_IsUploadConfirmed_Don_t_show_this_message_again_" xml:space="preserve">
     <value>Ne plus afficher ce message.</value>
   </data>
-  <data name="TaskSettingsForm_UpdateUploaderMenuNames_Task___0_" xml:space="preserve">
-    <value>Tâche : {0}</value>
-  </data>
   <data name="AboutForm_AboutForm_Changelog" xml:space="preserve">
     <value>Historique des modifications</value>
   </data>
@@ -280,17 +262,8 @@ Veuillez sélectionner un raccourci différent ou quitter l'application en confl
   <data name="UploadTask_Prepare_Starting" xml:space="preserve">
     <value>Démarrage</value>
   </data>
-  <data name="AboutForm_AboutForm_External_libraries" xml:space="preserve">
-    <value>Bibliothèques externes</value>
-  </data>
-  <data name="Program_Run_Error" xml:space="preserve">
-    <value>Erreur</value>
-  </data>
   <data name="MainForm_UpdateWorkflowsMenu_You_can_add_workflows_from_hotkey_settings___" xml:space="preserve">
     <value>Vous pouvez ajouter des workflows à partir des paramètres des raccourcis clavier...</value>
-  </data>
-  <data name="ImageData_Write_Error" xml:space="preserve">
-    <value>Impossible d'enregistrer l'image pour le chemin {0}.</value>
   </data>
   <data name="ApplicationSettingsForm_cbLanguage_SelectedIndexChanged_Language_Restart" xml:space="preserve">
     <value>ShareX doit être redémarré pour que les changements de langue s'appliquent.
@@ -319,9 +292,6 @@ Voulez-vous redémarrer ShareX ?</value>
   </data>
   <data name="Program_Run_Unable_to_create_folder_" xml:space="preserve">
     <value>Impossible de créer le dossier :</value>
-  </data>
-  <data name="MainForm_UpdateMainFormTip_Currently_configured_hotkeys_" xml:space="preserve">
-    <value>Raccourcis clavier actuellement définis :</value>
   </data>
   <data name="RecentManager_UpdateRecentMenu_Left_click_to_copy_URL_to_clipboard__Right_click_to_open_URL_" xml:space="preserve">
     <value>Clic gauche pour copier l'URL dans le presse-papier. Clic droit pour l'ouvrir.</value>
@@ -365,9 +335,6 @@ Voulez-vous redémarrer ShareX ?</value>
   </data>
   <data name="MainForm_tsmiTestTextUpload_Click_Text_upload_test" xml:space="preserve">
     <value>Test de mise en ligne d'un texte</value>
-  </data>
-  <data name="MainForm_UpdateMainWindowLayout_Hide_columns" xml:space="preserve">
-    <value>Cacher les colonnes</value>
   </data>
   <data name="TaskSettingsForm_UpdateWindowTitle_Task_settings_for__0_" xml:space="preserve">
     <value>Paramètres des tâches pour {0}</value>
@@ -492,9 +459,6 @@ Clique de la molette pour fermer</value>
   <data name="UploadManager_ShowShortenURLDialog_ShortenURL" xml:space="preserve">
     <value>Raccourcir URL</value>
   </data>
-  <data name="ApplicationSettingsForm_btnCheckDevBuild_Click_DevBuilds_Warning" xml:space="preserve">
-    <value>Les versions de développement peuvent être instables et doivent être utilisées uniquement à des fins de test. Voulez-vous installer ?</value>
-  </data>
   <data name="IntegrationHelpers_EditWithShareX" xml:space="preserve">
     <value>Modifier avec ShareX</value>
   </data>
@@ -506,9 +470,6 @@ Clique de la molette pour fermer</value>
   </data>
   <data name="ShareXConfirmation" xml:space="preserve">
     <value>ShareX - Confirmation</value>
-  </data>
-  <data name="ShareXOpticalCharacterRecognition" xml:space="preserve">
-    <value>ShareX - Reconnaissance optique de caractères</value>
   </data>
   <data name="UploadManager_ShowShortenURLDialog_Shorten" xml:space="preserve">
     <value>Raccourcir</value>
@@ -538,9 +499,6 @@ Voulez-vous redémarrer ShareX ?</value>
   </data>
   <data name="AboutForm_AboutForm_Language_es_MX" xml:space="preserve">
     <value>Espagnol mexicain</value>
-  </data>
-  <data name="PleaseNoteThatShareXIsUsingOCRSpaceSOnlineAPIToPerformOpticalCharacterRecognitionDoYouGivePermissionToShareXToUploadImagesToThisService" xml:space="preserve">
-    <value>Veuillez noter que ShareX utilise l'API en ligne OCR.Space pour effectuer la reconnaissance optique de caractères. Donnez-vous la permission à ShareX de mettre en ligne des images vers ce service ?</value>
   </data>
   <data name="ActionsToolbar_StayTopMost" xml:space="preserve">
     <value>Rester sur le dessus</value>
@@ -587,19 +545,99 @@ Vous pourrez les désactiver plus tard depuis le manu "Tâches après la capture
   <data name="FailedToSaveSettings" xml:space="preserve">
     <value>Échec de l'enregistrement des paramètres</value>
   </data>
-  <data name="Hotkey" xml:space="preserve">
-    <value>Raccourci clavier</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
   <data name="ScreenColorPicker" xml:space="preserve">
     <value>Sélecteur de couleurs de l'écran</value>
   </data>
   <data name="ShareXIsMinimizedToTheSystemTray" xml:space="preserve">
     <value>ShareX est réduit dans la zone de notification.</value>
   </data>
-  <data name="YourAntiVirusSoftwareOrTheControlledFolderAccessFeatureInWindows10CouldBeBlockingShareX" xml:space="preserve">
-    <value>Votre antivirus ou la fonctionnalité d'accès contrôlé aux dossiers dans Windows 10 pourrait bloquer ShareX.</value>
+  <data name="PinToScreen" xml:space="preserve">
+    <value>Epingler à l'écran</value>
+  </data>
+  <data name="InspectWindow_ProcessName" xml:space="preserve">
+    <value>Nom du processus</value>
+  </data>
+  <data name="ShareXIsUpToDate" xml:space="preserve">
+    <value>ShareX est à jour !</value>
+  </data>
+  <data name="InspectWindow_ClassName" xml:space="preserve">
+    <value>Nom de classe</value>
+  </data>
+  <data name="FFmpegOnlySupports64BitOperatingSystems" xml:space="preserve">
+    <value>FFmpeg inclus dans ShareX ne support que les systèmes d'exploitation 64-bits.</value>
+  </data>
+  <data name="AboutForm_AboutForm_Language_he-IL" xml:space="preserve">
+    <value>Hébreu</value>
+  </data>
+  <data name="InspectWindow_ProcessFileName" xml:space="preserve">
+    <value>Nom de fichier du processus</value>
+  </data>
+  <data name="FFmpegIsMissing" xml:space="preserve">
+    <value>FFmpeg est manquant</value>
+  </data>
+  <data name="AboutForm_AboutForm_Language_pl" xml:space="preserve">
+    <value>Polonais</value>
+  </data>
+  <data name="AboutForm_AboutForm_Privacy_policy" xml:space="preserve">
+    <value>Politique de confidentialité</value>
+  </data>
+  <data name="AboutForm_AboutForm_Links" xml:space="preserve">
+    <value>Liens</value>
+  </data>
+  <data name="ClipboardDoesNotContainAnImage" xml:space="preserve">
+    <value>Le presse-papier ne contient pas d'image.</value>
+  </data>
+  <data name="InspectWindow_WindowStyles" xml:space="preserve">
+    <value>Style des fenêtres</value>
+  </data>
+  <data name="YourAntiVirusSoftwareOrTheControlledFolderAccessFeatureInWindowsCouldBeBlockingShareX" xml:space="preserve">
+    <value>Votre logiciel anti-virus ou le control des répertoires Windows pourrait bloquer ShareX.</value>
+  </data>
+  <data name="FFmpeg_FFmpeg_error" xml:space="preserve">
+    <value>Erreur FFmpeg</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="OpticalCharacterRecognitionFeatureIsOnlyAvailableWithWindowsVersion0OrNewer" xml:space="preserve">
+    <value>La reconnaissance optique de caractères est uniquement disponible avec Windows version {0} ou plus récent.</value>
+  </data>
+  <data name="InspectWindow_WindowTitle" xml:space="preserve">
+    <value>Titre de la fenêtre</value>
+  </data>
+  <data name="WouldYouLikeToRetryClipboardUpload" xml:space="preserve">
+    <value>Voulez-vous réessayer la mise en ligne depuis le presse-papier ?</value>
+  </data>
+  <data name="ShareXCannotBeClosedWhileScreenRecordingIsActive" xml:space="preserve">
+    <value>ShareX ne peut être fermé lorsqu'un enregistrement d'écran est en cours.
+
+Voulez-vous annuler l'enregistrement d'écran en cours ?</value>
+  </data>
+  <data name="InspectWindow_ProcessIdentifier" xml:space="preserve">
+    <value>Identifiant du processus</value>
+  </data>
+  <data name="UnableToFindAWindowWithSpecifiedWindowTitle" xml:space="preserve">
+    <value>Impossible de trouver une fenêtre correspondant au titre indiqué.</value>
+  </data>
+  <data name="InspectWindow_WindowHandle" xml:space="preserve">
+    <value>Poignée de fenêtre</value>
+  </data>
+  <data name="AboutForm_AboutForm_Team" xml:space="preserve">
+    <value>Equipe</value>
+  </data>
+  <data name="ClipboardUpload" xml:space="preserve">
+    <value>Mise en ligne du presse-papier</value>
+  </data>
+  <data name="FFmpegDoesNotExistAtTheFollowingPath" xml:space="preserve">
+    <value>FFmpeg est introuvable à l'emplacement spécifié :</value>
+  </data>
+  <data name="ImageData_Write_Error_Message" xml:space="preserve">
+    <value>Impossible d'écrire l'image à l'emplacement spécifié :</value>
+  </data>
+  <data name="YourSystemAdminDisabledTheUploadFeature" xml:space="preserve">
+    <value>Votre administrateur système a désactivé la fonctionnalité de mise en ligne.</value>
+  </data>
+  <data name="AboutForm_AboutForm_Language_ar_YE" xml:space="preserve">
+    <value>Arabe</value>
   </data>
 </root>

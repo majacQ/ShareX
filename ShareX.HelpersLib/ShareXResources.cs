@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 #endregion License Information (GPL v3)
 
 using ShareX.HelpersLib.Properties;
-using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
@@ -34,12 +33,13 @@ namespace ShareX.HelpersLib
 {
     public static class ShareXResources
     {
+        public static string Name { get; set; } = "ShareX";
+
         public static string UserAgent
         {
             get
             {
-                Version version = Version.Parse(Application.ProductVersion);
-                return $"ShareX/{version.Major}.{version.Minor}.{version.Build}";
+                return $"{Name}/{Helpers.GetApplicationVersion()}";
             }
         }
 
@@ -59,16 +59,77 @@ namespace ShareX.HelpersLib
 
         public static bool IsDarkTheme => UseCustomTheme && Theme.IsDarkTheme;
 
-        public static bool UseWhiteIcon { get; set; }
+        private static bool useWhiteIcon;
 
-        public static Icon Icon => UseWhiteIcon ? Resources.ShareX_Icon_White : Resources.ShareX_Icon;
+        public static bool UseWhiteIcon
+        {
+            get
+            {
+                return useWhiteIcon;
+            }
+            set
+            {
+                if (useWhiteIcon != value)
+                {
+                    useWhiteIcon = value;
 
-        public static Bitmap Logo => Resources.ShareX_Logo;
+                    if (useWhiteIcon)
+                    {
+                        Icon = Resources.ShareX_Icon_White;
+                    }
+                    else
+                    {
+                        Icon = Resources.ShareX_Icon;
+                    }
+                }
+            }
+        }
+
+        private static Icon icon = Resources.ShareX_Icon;
+
+        public static Icon Icon
+        {
+            get
+            {
+                return icon.CloneSafe();
+            }
+            set
+            {
+                if (icon != value)
+                {
+                    icon?.Dispose();
+                    icon = value;
+                }
+            }
+        }
+
+        private static Bitmap logo = Resources.ShareX_Logo;
+
+        public static Bitmap Logo
+        {
+            get
+            {
+                return logo.CloneSafe();
+            }
+            set
+            {
+                if (logo != value)
+                {
+                    logo?.Dispose();
+                    logo = value;
+                }
+            }
+        }
 
         public static ShareXTheme Theme { get; set; } = ShareXTheme.DarkTheme;
 
-        public static void ApplyTheme(Form form, bool setIcon = true)
+        public static void ApplyTheme(Form form, bool closeOnEscape = false, bool setIcon = true)
         {
+            if (closeOnEscape)
+            {
+                form.CloseOnEscape();
+            }
+
             if (setIcon)
             {
                 form.Icon = Icon;
@@ -106,6 +167,13 @@ namespace ShareX.HelpersLib
 
             switch (control)
             {
+                case ColorButton colorButton:
+                    colorButton.FlatStyle = FlatStyle.Flat;
+                    colorButton.FlatAppearance.BorderColor = Theme.BorderColor;
+                    colorButton.ForeColor = Theme.TextColor;
+                    colorButton.BackColor = Theme.LightBackgroundColor;
+                    colorButton.BorderColor = Theme.BorderColor;
+                    return;
                 case Button btn:
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.FlatAppearance.BorderColor = Theme.BorderColor;

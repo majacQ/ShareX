@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ namespace ShareX.ScreenCaptureLib
             Options = options;
 
             InitializeComponent();
-            ShareXResources.ApplyTheme(this);
+            ShareXResources.ApplyTheme(this, true);
         }
 
         private void LoadImageFile(string imageFilePath)
@@ -85,13 +85,59 @@ namespace ShareX.ScreenCaptureLib
 
                 if (files != null)
                 {
-                    string imageFilePath = files.FirstOrDefault(x => Helpers.IsImageFile(x));
+                    string imageFilePath = files.FirstOrDefault(x => FileHelpers.IsImageFile(x));
                     LoadImageFile(imageFilePath);
                 }
             }
             else
             {
                 MessageBox.Show(Resources.EditorStartupForm_ClipboardDoesNotContainAnImage, "ShareX", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private async void btnLoadImageFromURL_Click(object sender, EventArgs e)
+        {
+            string inputText = null;
+
+            string text = ClipboardHelpers.GetText(true);
+
+            if (URLHelpers.IsValidURL(text))
+            {
+                inputText = text;
+            }
+
+            string url = InputBox.Show(Resources.ImageURL, inputText);
+
+            if (!string.IsNullOrEmpty(url))
+            {
+                btnOpenImageFile.Enabled = btnLoadImageFromClipboard.Enabled = btnLoadImageFromURL.Enabled = btnCreateNewImage.Enabled = false;
+                Cursor = Cursors.WaitCursor;
+
+                try
+                {
+                    Image = await WebHelpers.DownloadImageAsync(url);
+
+                    if (IsDisposed)
+                    {
+                        Image?.Dispose();
+
+                        return;
+                    }
+                    else if (Image != null)
+                    {
+                        DialogResult = DialogResult.OK;
+                        Close();
+
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.ShowError();
+                }
+
+                Cursor = Cursors.Default;
+                btnOpenImageFile.Enabled = btnLoadImageFromClipboard.Enabled = btnLoadImageFromURL.Enabled = btnCreateNewImage.Enabled = true;
             }
         }
 
@@ -108,6 +154,7 @@ namespace ShareX.ScreenCaptureLib
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             Close();
         }
     }

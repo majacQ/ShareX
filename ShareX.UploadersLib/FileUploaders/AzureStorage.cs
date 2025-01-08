@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ namespace ShareX.UploadersLib.FileUploaders
         public override GenericUploader CreateUploader(UploadersConfig config, TaskReferenceHelper taskInfo)
         {
             return new AzureStorage(config.AzureStorageAccountName, config.AzureStorageAccountAccessKey, config.AzureStorageContainer,
-                config.AzureStorageEnvironment, config.AzureStorageCustomDomain, config.AzureStorageUploadPath);
+                config.AzureStorageEnvironment, config.AzureStorageCustomDomain, config.AzureStorageUploadPath, config.AzureStorageCacheControl);
         }
 
         public override TabPage GetUploadersConfigTabPage(UploadersConfigForm form) => form.tpAzureStorage;
@@ -68,9 +68,10 @@ namespace ShareX.UploadersLib.FileUploaders
         public string AzureStorageEnvironment { get; private set; }
         public string AzureStorageCustomDomain { get; private set; }
         public string AzureStorageUploadPath { get; private set; }
+        public string AzureStorageCacheControl { get; private set; }
 
         public AzureStorage(string azureStorageAccountName, string azureStorageAccessKey, string azureStorageContainer, string azureStorageEnvironment,
-            string customDomain, string uploadPath)
+            string customDomain, string uploadPath, string cacheControl)
         {
             AzureStorageAccountName = azureStorageAccountName;
             AzureStorageAccountAccessKey = azureStorageAccessKey;
@@ -78,6 +79,7 @@ namespace ShareX.UploadersLib.FileUploaders
             AzureStorageEnvironment = (!string.IsNullOrEmpty(azureStorageEnvironment)) ? azureStorageEnvironment : "blob.core.windows.net";
             AzureStorageCustomDomain = customDomain;
             AzureStorageUploadPath = uploadPath;
+            AzureStorageCacheControl = cacheControl;
         }
 
         public override UploadResult Upload(Stream stream, string fileName)
@@ -98,7 +100,7 @@ namespace ShareX.UploadersLib.FileUploaders
 
             OnEarlyURLCopyRequested(resultURL);
 
-            string contentType = RequestHelpers.GetMimeType(fileName);
+            string contentType = MimeTypes.GetMimeTypeFromFileName(fileName);
 
             NameValueCollection requestHeaders = new NameValueCollection();
             requestHeaders["x-ms-date"] = date;
@@ -106,6 +108,14 @@ namespace ShareX.UploadersLib.FileUploaders
             requestHeaders["x-ms-blob-type"] = "BlockBlob";
 
             string canonicalizedHeaders = $"x-ms-blob-type:BlockBlob\nx-ms-date:{date}\nx-ms-version:{APIVersion}\n";
+
+            if (!string.IsNullOrEmpty(AzureStorageCacheControl))
+            {
+                requestHeaders["x-ms-blob-cache-control"] = AzureStorageCacheControl;
+
+                canonicalizedHeaders = $"x-ms-blob-cache-control:{AzureStorageCacheControl}\n{canonicalizedHeaders}";
+            }
+
             string canonicalizedResource = $"/{AzureStorageAccountName}/{AzureStorageContainer}/{uploadPath}";
             string stringToSign = GenerateStringToSign(canonicalizedHeaders, canonicalizedResource, stream.Length.ToString(), contentType);
 
@@ -165,7 +175,7 @@ namespace ShareX.UploadersLib.FileUploaders
 
             if (!string.IsNullOrEmpty(AzureStorageUploadPath))
             {
-                string path = NameParser.Parse(NameParserType.FolderPath, AzureStorageUploadPath.Trim('/'));
+                string path = NameParser.Parse(NameParserType.FilePath, AzureStorageUploadPath.Trim('/'));
                 uploadPath = URLHelpers.CombineURL(path, fileName);
             }
             else
@@ -183,7 +193,7 @@ namespace ShareX.UploadersLib.FileUploaders
             if (!isRequest && !string.IsNullOrEmpty(AzureStorageCustomDomain))
             {
                 url = URLHelpers.CombineURL(AzureStorageCustomDomain, uploadPath);
-                url = URLHelpers.FixPrefix(url, "https://");
+                url = URLHelpers.FixPrefix(url);
             }
             else if (!isRequest && AzureStorageContainer == "$root")
             {

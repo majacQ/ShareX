@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ namespace ShareX.ImageEffectsLib
             pauseUpdate = true;
 
             InitializeComponent();
-            ShareXResources.ApplyTheme(this);
+            ShareXResources.ApplyTheme(this, true);
 
             PreviewImage = bmp;
             if (PreviewImage == null)
@@ -149,6 +149,7 @@ namespace ShareX.ImageEffectsLib
         {
             AddEffectToContextMenu(Resources.ImageEffectsForm_AddAllEffectsToTreeView_Drawings,
                 typeof(DrawBackground),
+                typeof(DrawBackgroundImage),
                 typeof(DrawBorder),
                 typeof(DrawCheckerboard),
                 typeof(DrawImage),
@@ -202,7 +203,8 @@ namespace ShareX.ImageEffectsLib
                 typeof(Sharpen),
                 typeof(Slice),
                 typeof(Smooth),
-                typeof(TornEdge));
+                typeof(TornEdge),
+                typeof(WaveEdge));
         }
 
         private void AddEffectToContextMenu(string groupName, params Type[] imageEffects)
@@ -333,6 +335,30 @@ namespace ShareX.ImageEffectsLib
             btnEffectRemove.Enabled = btnEffectDuplicate.Enabled = lvEffects.SelectedItems.Count > 0;
         }
 
+        private void UpdateEffectName()
+        {
+            ImageEffectPreset preset = GetSelectedPreset();
+
+            if (preset != null)
+            {
+                if (lvEffects.SelectedItems.Count > 0)
+                {
+                    ListViewItem lvi = lvEffects.SelectedItems[0];
+
+                    if (lvi.Tag is ImageEffect imageEffect)
+                    {
+                        string text = imageEffect.ToString();
+
+                        if (lvi.Text != text)
+                        {
+                            lvi.Text = text;
+                            txtEffectName.SetWatermark(imageEffect.ToString());
+                        }
+                    }
+                }
+            }
+        }
+
         private void GeneratePreviewImage(int padding)
         {
             if (pbResult.ClientSize.Width > 0 && pbResult.ClientSize.Height > 0)
@@ -436,13 +462,14 @@ namespace ShareX.ImageEffectsLib
 
         private void ClearSelectedEffect()
         {
-            lblEffect.Text = Resources.Effect;
+            txtEffectName.Text = "";
+            txtEffectName.SetWatermark("");
             pgSettings.SelectedObject = null;
         }
 
         private void AddEffect(ImageEffect imageEffect, ImageEffectPreset preset = null)
         {
-            ListViewItem lvi = new ListViewItem(imageEffect.GetType().GetDescription());
+            ListViewItem lvi = new ListViewItem(imageEffect.ToString());
             lvi.Checked = imageEffect.Enabled;
             lvi.Tag = imageEffect;
 
@@ -641,6 +668,20 @@ namespace ShareX.ImageEffectsLib
             UpdatePreview();
         }
 
+        private void txtEffectName_TextChanged(object sender, EventArgs e)
+        {
+            if (lvEffects.SelectedItems.Count > 0)
+            {
+                ListViewItem lvi = lvEffects.SelectedItems[0];
+
+                if (lvi.Tag is ImageEffect imageEffect)
+                {
+                    imageEffect.Name = txtEffectName.Text;
+                    lvi.Text = imageEffect.ToString();
+                }
+            }
+        }
+
         private void lvEffects_ItemMoved(object sender, int oldIndex, int newIndex)
         {
             ImageEffectPreset preset = GetSelectedPreset();
@@ -660,10 +701,11 @@ namespace ShareX.ImageEffectsLib
             {
                 ListViewItem lvi = lvEffects.SelectedItems[0];
 
-                if (lvi.Tag is ImageEffect ie)
+                if (lvi.Tag is ImageEffect imageEffect)
                 {
-                    lblEffect.Text = ie.GetType().GetDescription() + ":";
-                    pgSettings.SelectedObject = ie;
+                    txtEffectName.Text = imageEffect.Name;
+                    txtEffectName.SetWatermark(imageEffect.ToString());
+                    pgSettings.SelectedObject = imageEffect;
                 }
             }
 
@@ -696,6 +738,7 @@ namespace ShareX.ImageEffectsLib
 
         private void pgSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
+            UpdateEffectName();
             UpdatePreview();
         }
 
@@ -737,7 +780,7 @@ namespace ShareX.ImageEffectsLib
 
         private void btnImageEffects_Click(object sender, EventArgs e)
         {
-            URLHelpers.OpenURL(Links.URL_IMAGE_EFFECTS);
+            URLHelpers.OpenURL(Links.ImageEffects);
         }
 
         private void tsmiLoadImageFromFile_Click(object sender, EventArgs e)
@@ -814,7 +857,7 @@ namespace ShareX.ImageEffectsLib
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop, false))
             {
-                if (e.Data.GetData(DataFormats.FileDrop, false) is string[] files && files.Length > 0 && Helpers.IsImageFile(files[0]))
+                if (e.Data.GetData(DataFormats.FileDrop, false) is string[] files && files.Length > 0 && FileHelpers.IsImageFile(files[0]))
                 {
                     if (PreviewImage != null) PreviewImage.Dispose();
                     PreviewImage = ImageHelpers.LoadImage(files[0]);
@@ -840,6 +883,7 @@ namespace ShareX.ImageEffectsLib
 
         private void btnClose_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 

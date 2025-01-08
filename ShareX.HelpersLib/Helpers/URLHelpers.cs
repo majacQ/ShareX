@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -44,7 +44,8 @@ namespace ShareX.HelpersLib
         public const string URLPathCharacters = URLCharacters + "/"; // 47
         public const string ValidURLCharacters = URLPathCharacters + ":?#[]@!$&'()*+,;= ";
 
-        public static readonly char[] BidiControlCharacters = new char[] { '\u200E', '\u200F', '\u202A', '\u202B', '\u202C', '\u202D', '\u202E' };
+        private static readonly string[] URLPrefixes = new string[] { "http://", "https://", "ftp://", "ftps://", "file://", "//" };
+        private static readonly char[] BidiControlCharacters = new char[] { '\u200E', '\u200F', '\u202A', '\u202B', '\u202C', '\u202D', '\u202E' };
 
         public static void OpenURL(string url)
         {
@@ -268,7 +269,7 @@ namespace ShareX.HelpersLib
 
             if (useRegex)
             {
-                // https://gist.github.com/729294
+                // Source: https://gist.github.com/729294
                 string pattern =
                     "^" +
                     // protocol identifier
@@ -414,14 +415,17 @@ namespace ShareX.HelpersLib
             return paths;
         }
 
-        private static readonly string[] URLPrefixes = new string[] { "http://", "https://", "ftp://", "ftps://", "file://", "//" };
-
         public static bool HasPrefix(string url)
         {
-            return URLPrefixes.Any(x => url.StartsWith(x, StringComparison.InvariantCultureIgnoreCase));
+            return URLPrefixes.Any(x => url.StartsWith(x, StringComparison.OrdinalIgnoreCase));
         }
 
-        public static string FixPrefix(string url, string prefix = "http://")
+        public static string GetPrefix(string url)
+        {
+            return URLPrefixes.FirstOrDefault(x => url.StartsWith(x, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static string FixPrefix(string url, string prefix = "https://")
         {
             if (!string.IsNullOrEmpty(url) && !HasPrefix(url))
             {
@@ -445,7 +449,7 @@ namespace ShareX.HelpersLib
         {
             foreach (string prefix in URLPrefixes)
             {
-                if (url.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
+                if (url.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 {
                     url = url.Remove(0, prefix.Length);
                     break;
@@ -463,7 +467,7 @@ namespace ShareX.HelpersLib
 
                 if (!string.IsNullOrEmpty(host))
                 {
-                    if (host.StartsWith("www.", StringComparison.InvariantCultureIgnoreCase))
+                    if (host.StartsWith("www.", StringComparison.OrdinalIgnoreCase))
                     {
                         host = host.Substring(4);
                     }

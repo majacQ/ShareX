@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -96,20 +96,19 @@ namespace ShareX.HelpersLib
 
         public void TryDefaultPrinterOverride()
         {
-            string windowsDefault = printDocument.PrinterSettings.PrinterName;
-            if (Settings.DefaultPrinterOverride.Length > 0)
+            string defaultPrinterName = printDocument.PrinterSettings.PrinterName;
+
+            if (!string.IsNullOrEmpty(Settings.DefaultPrinterOverride))
             {
                 printDocument.PrinterSettings.PrinterName = Settings.DefaultPrinterOverride;
             }
+
             if (!printDocument.PrinterSettings.IsValid)
             {
-                printDocument.PrinterSettings.PrinterName = windowsDefault;
-                using (MyMessageBox msgbox = new MyMessageBox("Printer \'" + Settings.DefaultPrinterOverride + "\' does not exist. Continuing with windows default printer, you can set the default printer override in application settings",
-                           "Specified Printer not Valid",
-                           MessageBoxButtons.OK))
-                {
-                    msgbox.ShowDialog();
-                }
+                printDocument.PrinterSettings.PrinterName = defaultPrinterName;
+
+                MessageBox.Show("Printer \"" + Settings.DefaultPrinterOverride + "\" does not exist. Continuing with Windows default printer, you can set the default printer override in application settings.",
+                    "Invalid printer name", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -121,6 +120,7 @@ namespace ShareX.HelpersLib
                 {
                     printTextHelper.Font = Settings.TextFont;
                 }
+
                 TryDefaultPrinterOverride();
                 printDocument.Print();
                 return true;
@@ -158,7 +158,7 @@ namespace ShareX.HelpersLib
             Image img;
 
             if (Settings.AutoRotateImage && ((rect.Width > rect.Height && Image.Width < Image.Height) ||
-                                             (rect.Width < rect.Height && Image.Width > Image.Height)))
+                (rect.Width < rect.Height && Image.Width > Image.Height)))
             {
                 img = (Image)Image.Clone();
                 img.RotateFlip(RotateFlipType.Rotate90FlipNone);

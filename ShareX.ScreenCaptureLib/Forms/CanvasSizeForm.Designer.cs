@@ -39,6 +39,7 @@
             this.nudBottom = new System.Windows.Forms.NumericUpDown();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.cbtnCanvasColor = new ShareX.HelpersLib.ColorButton();
             ((System.ComponentModel.ISupportInitialize)(this.nudLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTop)).BeginInit();
@@ -134,11 +135,18 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             resources.ApplyResources(this.btnCancel, "btnCancel");
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // cbtnCanvasColor
+            // 
+            this.cbtnCanvasColor.Color = System.Drawing.Color.Transparent;
+            this.cbtnCanvasColor.ColorPickerOptions = null;
+            resources.ApplyResources(this.cbtnCanvasColor, "cbtnCanvasColor");
+            this.cbtnCanvasColor.Name = "cbtnCanvasColor";
+            this.cbtnCanvasColor.UseVisualStyleBackColor = true;
             // 
             // CanvasSizeForm
             // 
@@ -146,7 +154,7 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.CancelButton = this.btnCancel;
+            this.Controls.Add(this.cbtnCanvasColor);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lblBottom);
@@ -183,5 +191,6 @@
         private System.Windows.Forms.NumericUpDown nudBottom;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private HelpersLib.ColorButton cbtnCanvasColor;
     }
 }

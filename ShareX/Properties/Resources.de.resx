@@ -120,9 +120,6 @@
   <data name="AutoCaptureForm_UpdateStatus_Timeleft___0_s___1____Total___2_" xml:space="preserve">
     <value>Zeit übrig: {0}s ({1}%) Gesamt: {2}</value>
   </data>
-  <data name="AboutForm_AboutForm_Contributors" xml:space="preserve">
-    <value>Mitwirkende</value>
-  </data>
   <data name="UploadManager_UploadURL_URL_to_download_from_and_upload" xml:space="preserve">
     <value>URL zum Down- und Upload</value>
   </data>
@@ -143,9 +140,6 @@
   </data>
   <data name="UploadManager_IsUploadConfirmed_Upload_files" xml:space="preserve">
     <value>Dateien hochladen</value>
-  </data>
-  <data name="HotkeyManager_ShowFailedHotkeys_These_applications_could_be_conflicting_" xml:space="preserve">
-    <value>Diese Anwendungen könnten die Benutzung vom ShareX stören:</value>
   </data>
   <data name="TaskManager_task_UploadCompleted_Error" xml:space="preserve">
     <value>Fehler</value>
@@ -193,9 +187,6 @@ Bitte starte ShareX als Administrator, um den Einstellungsordner zu ändern.</va
   <data name="TaskHelpers_OpenQuickScreenColorPicker_Copied_to_clipboard___0_" xml:space="preserve">
     <value>In Zwischenablage kopiert: {0}</value>
   </data>
-  <data name="MainForm_UpdateMenu_Hide_menu" xml:space="preserve">
-    <value>Menü ausblenden</value>
-  </data>
   <data name="TaskHelpers_TweetMessage_Unable_to_find_valid_Twitter_account_" xml:space="preserve">
     <value>Kann kein gültiges Twitter-Konto finden.</value>
   </data>
@@ -233,9 +224,6 @@ Bitte wähle ein anderes Tastenkürzel aus oder beende das widersprüchliche Pro
   <data name="UploadManager_IsUploadConfirmed_Don_t_show_this_message_again_" xml:space="preserve">
     <value>Diese Nachricht nicht mehr anzeigen.</value>
   </data>
-  <data name="TaskSettingsForm_UpdateUploaderMenuNames_Task___0_" xml:space="preserve">
-    <value>Aufgabe: Aufgabe {0}</value>
-  </data>
   <data name="AboutForm_AboutForm_Changelog" xml:space="preserve">
     <value>Änderungsprotokoll</value>
   </data>
@@ -254,17 +242,8 @@ Bitte wähle ein anderes Tastenkürzel aus oder beende das widersprüchliche Pro
   <data name="UploadTask_Prepare_Starting" xml:space="preserve">
     <value>Startet</value>
   </data>
-  <data name="AboutForm_AboutForm_External_libraries" xml:space="preserve">
-    <value>Externe Bibliotheken</value>
-  </data>
-  <data name="Program_Run_Error" xml:space="preserve">
-    <value>Fehler</value>
-  </data>
   <data name="MainForm_UpdateWorkflowsMenu_You_can_add_workflows_from_hotkey_settings___" xml:space="preserve">
     <value>Du kannst Arbeitsschritte aus den Hotkeyeinstellungen hinzufügen...</value>
-  </data>
-  <data name="ImageData_Write_Error" xml:space="preserve">
-    <value>Konnte Bild nicht in den Pfad {0} schreiben.</value>
   </data>
   <data name="ApplicationSettingsForm_cbLanguage_SelectedIndexChanged_Language_Restart" xml:space="preserve">
     <value>ShareX muss neu gestartet werden, damit die Sprachänderungen wirksam werden.
@@ -294,9 +273,6 @@ Soll ShareX neu gestartet werden?</value>
   </data>
   <data name="Program_Run_Unable_to_create_folder_" xml:space="preserve">
     <value>Konnte Ordner nicht erstellen:</value>
-  </data>
-  <data name="MainForm_UpdateMainFormTip_Currently_configured_hotkeys_" xml:space="preserve">
-    <value>Derzeit konfigurierte Tastenkürzel:</value>
   </data>
   <data name="RecentManager_UpdateRecentMenu_Left_click_to_copy_URL_to_clipboard__Right_click_to_open_URL_" xml:space="preserve">
     <value>Linksklick um den URL zu kopieren. Rechtsklick um den URL zu öffnen.</value>
@@ -364,9 +340,6 @@ Soll ShareX neu gestartet werden?</value>
   <data name="ApplicationSettingsForm_btnBrowseCustomScreenshotsPath_Click_Choose_screenshots_folder_path" xml:space="preserve">
     <value>Wähle einen Screenshot-Ordner aus</value>
   </data>
-  <data name="MainForm_UpdateMenu_Show_menu" xml:space="preserve">
-    <value>Menü anzeigen</value>
-  </data>
   <data name="UploadManager_UploadFolder_Folder_upload" xml:space="preserve">
     <value>Ordner hochladen</value>
   </data>
@@ -399,17 +372,11 @@ Bist du sicher?</value>
   <data name="HotkeySettingsForm_Reset_all_hotkeys_to_defaults_Confirmation" xml:space="preserve">
     <value>Alle Hotkeys auf die Standardeinstellungen zurücksetzen?</value>
   </data>
-  <data name="MainForm_UpdateMainWindowLayout_Show_columns" xml:space="preserve">
-    <value>Spalten anzeigen</value>
-  </data>
   <data name="ActionsToolbar_Edit" xml:space="preserve">
     <value>Bearbeiten...</value>
   </data>
   <data name="IntegrationHelpers_UploadWithShareX" xml:space="preserve">
     <value>Mit ShareX hochladen</value>
-  </data>
-  <data name="MainForm_UpdateMainWindowLayout_Hide_columns" xml:space="preserve">
-    <value>Spalten ausblenden</value>
   </data>
   <data name="ActionsToolbar_Close" xml:space="preserve">
     <value>Schließen</value>
@@ -430,9 +397,6 @@ Mittlere Maustaste um die Aktionsleiste zu schließen</value>
   </data>
   <data name="IntegrationHelpers_EditWithShareX" xml:space="preserve">
     <value>Mit ShareX bearbeiten</value>
-  </data>
-  <data name="ApplicationSettingsForm_btnCheckDevBuild_Click_DevBuilds_Warning" xml:space="preserve">
-    <value>Entwicklungs-Versionen können instabil sein und sind nur für Testzwecke geeignet. Möchten Sie diese trotzdem installieren?</value>
   </data>
   <data name="ApplicationSettingsForm_btnResetSettings_Click_WouldYouLikeToResetShareXSettings" xml:space="preserve">
     <value>Möchten Sie die ShareX-Einstellungen zurücksetzen?</value>
@@ -491,9 +455,6 @@ Mittlere Maustaste um die Aktionsleiste zu schließen</value>
   <data name="ScreenshotDelay0S" xml:space="preserve">
     <value>Screenshot-Verzögerung: {0}s</value>
   </data>
-  <data name="ShareXOpticalCharacterRecognition" xml:space="preserve">
-    <value>ShareX - Texterkennung (OCR)</value>
-  </data>
   <data name="OCRForm_AutoProcessing" xml:space="preserve">
     <value>Texterkennung wird verarbeitet.</value>
   </data>
@@ -516,9 +477,6 @@ Mittlere Maustaste um die Aktionsleiste zu schließen</value>
     <value>ShareX muss neu gestartet werden, damit die Änderungen am Einstellungsordner wirksam werden.
 
 Soll ShareX neu gestartet werden?</value>
-  </data>
-  <data name="PleaseNoteThatShareXIsUsingOCRSpaceSOnlineAPIToPerformOpticalCharacterRecognitionDoYouGivePermissionToShareXToUploadImagesToThisService" xml:space="preserve">
-    <value>Bitte beachte, dass ShareX OCR.Space's online API für die Ausführung der Texterkennung benutzt. Gibst du ShareX die Berechtigung, Bilder an diesen Dienst hochzuladen?</value>
   </data>
   <data name="ApplicationSettingsForm_cbStartWithWindows_EnabledByPolicy_Text" xml:space="preserve">
     <value>Autostart wurde durch Ihrer Organisation aktiviert</value>
@@ -573,5 +531,105 @@ Soll ShareX neu gestartet werden?</value>
   </data>
   <data name="YourSystemAdminDisabledTheUploadFeature" xml:space="preserve">
     <value>Ihr Systemadministrator hat diese Funktion ausgeschaltet.</value>
+  </data>
+  <data name="ScreenColorPicker" xml:space="preserve">
+    <value>Bildschirm-Farbwähler</value>
+  </data>
+  <data name="OpticalCharacterRecognitionFeatureIsOnlyAvailableWithWindowsVersion0OrNewer" xml:space="preserve">
+    <value>Die Funktion der optischen Zeichenerkennung ist nur unter Windows Version {0} oder neuer verfügbar.</value>
+  </data>
+  <data name="InspectWindow_WindowTitle" xml:space="preserve">
+    <value>Fenstertitel</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="InspectWindow_ExtendedWindowStyles" xml:space="preserve">
+    <value>Erweiterte Fensterstile</value>
+  </data>
+  <data name="FFmpeg_FFmpeg_error" xml:space="preserve">
+    <value>FFmpeg Fehler</value>
+  </data>
+  <data name="ImageData_Write_Error_Message" xml:space="preserve">
+    <value>Konnte das Bild nicht in den Pfad schreiben:</value>
+  </data>
+  <data name="FFmpegDoesNotExistAtTheFollowingPath" xml:space="preserve">
+    <value>FFmpeg existiert nicht unter dem folgenden Pfad:</value>
+  </data>
+  <data name="WouldYouLikeToRetryClipboardUpload" xml:space="preserve">
+    <value>Möchten Sie das Hochladen der Zwischenablage wiederholen?</value>
+  </data>
+  <data name="FFmpeg_FFmpeg_video_and_audio_source_both_can_t_be__None__" xml:space="preserve">
+    <value>FFmpeg Video- und Audioquelle können nicht beide „Keins“ sein.</value>
+  </data>
+  <data name="ShareXCannotBeClosedWhileScreenRecordingIsActive" xml:space="preserve">
+    <value>ShareX kann nicht geschlossen werden, während die Bildschirmaufnahme aktiv ist.
+
+Möchten Sie die aktive Bildschirmaufzeichnung abbrechen?</value>
+  </data>
+  <data name="UnableToFindAWindowWithSpecifiedWindowTitle" xml:space="preserve">
+    <value>Ein Fenster mit dem angegebenen Fenstertitel kann nicht gefunden werden.</value>
+  </data>
+  <data name="ClipboardUpload" xml:space="preserve">
+    <value>Hochladen der Zwischenablage</value>
+  </data>
+  <data name="InspectWindow_WindowHandle" xml:space="preserve">
+    <value>Fensteridentifikator</value>
+  </data>
+  <data name="FailedToSaveSettings" xml:space="preserve">
+    <value>Einstellungen speichern fehlgeschlagen</value>
+  </data>
+  <data name="InspectWindow_ClientRectangle" xml:space="preserve">
+    <value>Client-Rechteck</value>
+  </data>
+  <data name="YourAntiVirusSoftwareOrTheControlledFolderAccessFeatureInWindowsCouldBeBlockingShareX" xml:space="preserve">
+    <value>Ihre Antiviren-Software oder die Funktion für kontrollierten Ordnerzugriff in Windows könnte ShareX blockieren.</value>
+  </data>
+  <data name="AboutForm_AboutForm_Credits" xml:space="preserve">
+    <value>Danksagung</value>
+  </data>
+  <data name="InspectWindow_ClassName" xml:space="preserve">
+    <value>Klassenname</value>
+  </data>
+  <data name="FFmpegOnlySupports64BitOperatingSystems" xml:space="preserve">
+    <value>FFmpeg, das mit ShareX geliefert wird, unterstützt nur 64-Bit-Betriebssysteme.</value>
+  </data>
+  <data name="InspectWindow_WindowStyles" xml:space="preserve">
+    <value>Fensterstile</value>
+  </data>
+  <data name="ShareXIsUpToDate" xml:space="preserve">
+    <value>ShareX ist aktuell!</value>
+  </data>
+  <data name="InspectWindow_ProcessName" xml:space="preserve">
+    <value>Prozessname</value>
+  </data>
+  <data name="ShareXIsMinimizedToTheSystemTray" xml:space="preserve">
+    <value>ShareX wird in die Taskleiste minimiert.</value>
+  </data>
+  <data name="AboutForm_AboutForm_Language_he-IL" xml:space="preserve">
+    <value>Hebräisch</value>
+  </data>
+  <data name="InspectWindow_ProcessFileName" xml:space="preserve">
+    <value>Name der Prozessdatei</value>
+  </data>
+  <data name="FFmpegIsMissing" xml:space="preserve">
+    <value>FFmpeg fehlt</value>
+  </data>
+  <data name="WouldYouLikeToResetThemes" xml:space="preserve">
+    <value>Möchten Sie die Themen zurücksetzen?</value>
+  </data>
+  <data name="InspectWindow_WindowRectangle" xml:space="preserve">
+    <value>Fensterrechteck</value>
+  </data>
+  <data name="WouldYouLikeToEnableImageEffects" xml:space="preserve">
+    <value>Möchten Sie die Bildeffekte aktivieren?
+
+Sie können sie später im Menü „Aufgaben nach der Aufnahme“ deaktivieren.</value>
+  </data>
+  <data name="ClipboardDoesNotContainAnImage" xml:space="preserve">
+    <value>Die Zwischenablage enthält kein Bild.</value>
+  </data>
+  <data name="InspectWindow_ProcessIdentifier" xml:space="preserve">
+    <value>Prozesskennzeichen</value>
   </data>
 </root>

@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ namespace ShareX.HelpersLib
             }
         }
 
-        public string ProcessFileName => Helpers.GetFilenameSafe(ProcessFilePath);
+        public string ProcessFileName => FileHelpers.GetFileNameSafe(ProcessFilePath);
 
         public int ProcessId
         {
@@ -75,6 +75,8 @@ namespace ShareX.HelpersLib
                 }
             }
         }
+
+        public IntPtr Parent => NativeMethods.GetParent(Handle);
 
         public Rectangle Rectangle => CaptureHelpers.GetWindowRectangle(Handle);
 
@@ -104,6 +106,64 @@ namespace ShareX.HelpersLib
             }
         }
 
+        public bool Layered
+        {
+            get
+            {
+                return ExStyle.HasFlag(WindowStyles.WS_EX_LAYERED);
+            }
+            set
+            {
+                if (value)
+                {
+                    ExStyle |= WindowStyles.WS_EX_LAYERED;
+                }
+                else
+                {
+                    ExStyle &= ~WindowStyles.WS_EX_LAYERED;
+                }
+            }
+        }
+
+        public bool TopMost
+        {
+            get
+            {
+                return ExStyle.HasFlag(WindowStyles.WS_EX_TOPMOST);
+            }
+            set
+            {
+                SetWindowPos(value ? (IntPtr)NativeConstants.HWND_TOPMOST : (IntPtr)NativeConstants.HWND_NOTOPMOST,
+                    SetWindowPosFlags.SWP_NOMOVE | SetWindowPosFlags.SWP_NOSIZE);
+            }
+        }
+
+        public byte Opacity
+        {
+            get
+            {
+                if (Layered)
+                {
+                    NativeMethods.GetLayeredWindowAttributes(Handle, out _, out byte alpha, out _);
+                    return alpha;
+                }
+
+                return 255;
+            }
+            set
+            {
+                if (value < 255)
+                {
+                    Layered = true;
+                    NativeMethods.SetLayeredWindowAttributes(Handle, 0, value, NativeConstants.LWA_ALPHA);
+                }
+                else
+                {
+                    Layered = false;
+                }
+            }
+        }
+
         public Icon Icon => NativeMethods.GetApplicationIcon(Handle);
 
         public bool IsMaximized => NativeMethods.IsZoomed(Handle);
@@ -129,6 +189,14 @@ namespace ShareX.HelpersLib
             }
         }
 
+        public void BringToFront()
+        {
+            if (IsHandleCreated)
+            {
+                SetWindowPos(SetWindowPosFlags.SWP_NOMOVE | SetWindowPosFlags.SWP_NOSIZE);
+            }
+        }
+
         public void Restore()
         {
             if (IsHandleCreated)
@@ -139,17 +207,22 @@ namespace ShareX.HelpersLib
 
         public void SetWindowPos(SetWindowPosFlags flags)
         {
-            SetWindowPos(0, 0, 0, 0, flags);
+            SetWindowPos((IntPtr)NativeConstants.HWND_TOP, 0, 0, 0, 0, flags);
         }
 
         public void SetWindowPos(Rectangle rect, SetWindowPosFlags flags)
         {
-            SetWindowPos(rect.X, rect.Y, rect.Width, rect.Height, flags);
+            SetWindowPos((IntPtr)NativeConstants.HWND_TOP, rect.X, rect.Y, rect.Width, rect.Height, flags);
         }
 
-        public void SetWindowPos(int x, int y, int width, int height, SetWindowPosFlags flags)
+        public void SetWindowPos(IntPtr insertAfter, SetWindowPosFlags flags)
         {
-            NativeMethods.SetWindowPos(Handle, IntPtr.Zero, x, y, width, height, flags);
+            SetWindowPos(insertAfter, 0, 0, 0, 0, flags);
+        }
+
+        public void SetWindowPos(IntPtr insertAfter, int x, int y, int width, int height, SetWindowPosFlags flags)
+        {
+            NativeMethods.SetWindowPos(Handle, insertAfter, x, y, width, height, flags);
         }
 
         public override string ToString()

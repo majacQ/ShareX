@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using ZXing;
-using ZXing.Common;
+using ZXing.QrCode;
 using ZXing.Rendering;
 
 namespace ShareX
@@ -60,16 +60,15 @@ namespace ShareX
         public QRCodeForm(string text = null)
         {
             InitializeComponent();
-            rtbDecodeResult.AddContextMenu();
-            ShareXResources.ApplyTheme(this);
+            ShareXResources.ApplyTheme(this, true);
 
             if (!string.IsNullOrEmpty(text))
             {
-                txtQRCode.Text = text;
+                txtText.Text = text;
             }
         }
 
-        public static QRCodeForm EncodeClipboard()
+        public static QRCodeForm GenerateQRCodeFromClipboard()
         {
             string text = ClipboardHelpers.GetText(true);
 
@@ -81,29 +80,18 @@ namespace ShareX
             return new QRCodeForm();
         }
 
-        public static QRCodeForm OpenFormDecodeFromFile(string filePath)
+        public static QRCodeForm OpenFormScanFromImageFile(string filePath)
         {
             QRCodeForm form = new QRCodeForm();
-            form.tcMain.SelectedTab = form.tpDecode;
-            form.DecodeFromFile(filePath);
+            form.ScanFromImageFile(filePath);
             return form;
         }
 
-        public static QRCodeForm OpenFormDecodeFromScreen()
+        public static QRCodeForm OpenFormScanFromScreen()
         {
             QRCodeForm form = Instance;
-            form.tcMain.SelectedTab = form.tpDecode;
-            form.DecodeFromScreen();
+            form.ScanFromScreen();
             return form;
-        }
-
-        private void QRCodeForm_Shown(object sender, EventArgs e)
-        {
-            isReady = true;
-
-            txtQRCode.SetWatermark(Resources.QRCodeForm_InputTextToEncode);
-
-            EncodeText(txtQRCode.Text);
         }
 
         private void ClearQRCode()
@@ -111,24 +99,43 @@ namespace ShareX
             if (pbQRCode.Image != null)
             {
                 Image temp = pbQRCode.Image;
-                pbQRCode.Image = null;
+                pbQRCode.Reset();
                 temp.Dispose();
+
+                pbQRCode.PictureBoxBackColor = BackColor;
             }
         }
 
-        private void EncodeText(string text)
+        private void GenerateQRCode(string text)
         {
             if (isReady)
             {
                 ClearQRCode();
 
-                int size = Math.Min(pbQRCode.Width, pbQRCode.Height);
-                pbQRCode.Image = TaskHelpers.CreateQRCode(text, size);
-                pbQRCode.BackColor = Color.White;
+                if (!string.IsNullOrEmpty(text))
+                {
+                    int size;
+
+                    if (nudQRCodeSize.Value > 0)
+                    {
+                        size = (int)nudQRCodeSize.Value;
+                    }
+                    else
+                    {
+                        size = Math.Min(pbQRCode.Width, pbQRCode.Height);
+                    }
+
+                    size = Math.Max(size, 64);
+
+                    Image qrCode = TaskHelpers.GenerateQRCode(text, size);
+
+                    pbQRCode.PictureBoxBackColor = Color.White;
+                    pbQRCode.LoadImage(qrCode);
+                }
             }
         }
 
-        private void DecodeImage(Bitmap bmp)
+        private void ScanImage(Bitmap bmp)
         {
             string output = "";
 
@@ -139,24 +146,10 @@ namespace ShareX
                 output = string.Join(Environment.NewLine + Environment.NewLine, results);
             }
 
-            rtbDecodeResult.Text = output;
+            txtText.Text = output;
         }
 
-        private void DecodeFromFile(string filePath)
-        {
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                using (Bitmap bmp = ImageHelpers.LoadImage(filePath))
-                {
-                    if (bmp != null)
-                    {
-                        DecodeImage(bmp);
-                    }
-                }
-            }
-        }
-
-        private void DecodeFromScreen()
+        private void ScanFromScreen()
         {
             try
             {
@@ -172,7 +165,7 @@ namespace ShareX
                 {
                     if (bmp != null)
                     {
-                        DecodeImage(bmp);
+                        ScanImage(bmp);
                     }
                 }
             }
@@ -182,17 +175,64 @@ namespace ShareX
             }
         }
 
+        private void ScanFromImageFile(string filePath)
+        {
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                using (Bitmap bmp = ImageHelpers.LoadImage(filePath))
+                {
+                    if (bmp != null)
+                    {
+                        ScanImage(bmp);
+                    }
+                }
+            }
+        }
+
+        private void QRCodeForm_Shown(object sender, EventArgs e)
+        {
+            isReady = true;
+
+            txtText.SetWatermark(Resources.QRCodeForm_InputTextToEncode);
+
+            GenerateQRCode(txtText.Text);
+        }
+
         private void QRCodeForm_Resize(object sender, EventArgs e)
         {
-            EncodeText(txtQRCode.Text);
+            if (nudQRCodeSize.Value == 0)
+            {
+                GenerateQRCode(txtText.Text);
+            }
         }
 
-        private void txtQRCode_TextChanged(object sender, EventArgs e)
+        private void btnScanQRCodeFromScreen_Click(object sender, EventArgs e)
         {
-            EncodeText(txtQRCode.Text);
+            txtText.ResetText();
+
+            ScanFromScreen();
         }
 
-        private void tsmiCopy_Click(object sender, EventArgs e)
+        private void btnScanQRCodeFromImageFile_Click(object sender, EventArgs e)
+        {
+            txtText.ResetText();
+
+            string filePath = ImageHelpers.OpenImageFileDialog();
+
+            ScanFromImageFile(filePath);
+        }
+
+        private void txtText_TextChanged(object sender, EventArgs e)
+        {
+            GenerateQRCode(txtText.Text);
+        }
+
+        private void nudQRCodeSize_ValueChanged(object sender, EventArgs e)
+        {
+            GenerateQRCode(txtText.Text);
+        }
+
+        private void btnCopyImage_Click(object sender, EventArgs e)
         {
             if (pbQRCode.Image != null)
             {
@@ -200,32 +240,33 @@ namespace ShareX
             }
         }
 
-        private void tsmiSaveAs_Click(object sender, EventArgs e)
+        private void btnSaveImage_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtQRCode.Text))
+            if (!string.IsNullOrEmpty(txtText.Text))
             {
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {
                     sfd.Filter = @"PNG (*.png)|*.png|JPEG (*.jpg)|*.jpg|Bitmap (*.bmp)|*.bmp|SVG (*.svg)|*.svg";
-                    sfd.FileName = txtQRCode.Text;
+                    sfd.FileName = txtText.Text;
                     sfd.DefaultExt = "png";
 
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
                         string filePath = sfd.FileName;
 
-                        if (filePath.EndsWith("svg", StringComparison.InvariantCultureIgnoreCase))
+                        if (filePath.EndsWith("svg", StringComparison.OrdinalIgnoreCase))
                         {
-                            BarcodeWriterSvg writer = new BarcodeWriterSvg
+                            BarcodeWriterSvg writer = new BarcodeWriterSvg()
                             {
                                 Format = BarcodeFormat.QR_CODE,
-                                Options = new EncodingOptions
+                                Options = new QrCodeEncodingOptions()
                                 {
                                     Width = pbQRCode.Width,
-                                    Height = pbQRCode.Height
+                                    Height = pbQRCode.Height,
+                                    CharacterSet = "UTF-8"
                                 }
                             };
-                            SvgRenderer.SvgImage svgImage = writer.Write(txtQRCode.Text);
+                            SvgRenderer.SvgImage svgImage = writer.Write(txtText.Text);
                             File.WriteAllText(filePath, svgImage.Content, Encoding.UTF8);
                         }
                         else
@@ -240,40 +281,13 @@ namespace ShareX
             }
         }
 
-        private void tsmiUpload_Click(object sender, EventArgs e)
+        private void btnUploadImage_Click(object sender, EventArgs e)
         {
             if (pbQRCode.Image != null)
             {
                 Bitmap bmp = (Bitmap)pbQRCode.Image.Clone();
-                UploadManager.UploadImage(bmp);
+                TaskHelpers.MainFormUploadImage(bmp);
             }
-        }
-
-        private void tsmiDecode_Click(object sender, EventArgs e)
-        {
-            if (pbQRCode.Image != null)
-            {
-                tcMain.SelectedTab = tpDecode;
-
-                DecodeImage((Bitmap)pbQRCode.Image);
-            }
-        }
-
-        private void btnDecodeFromScreen_Click(object sender, EventArgs e)
-        {
-            DecodeFromScreen();
-        }
-
-        private void btnDecodeFromFile_Click(object sender, EventArgs e)
-        {
-            string filePath = ImageHelpers.OpenImageFileDialog();
-
-            DecodeFromFile(filePath);
-        }
-
-        private void rtbDecodeResult_LinkClicked(object sender, LinkClickedEventArgs e)
-        {
-            URLHelpers.OpenURL(e.LinkText);
         }
     }
 }

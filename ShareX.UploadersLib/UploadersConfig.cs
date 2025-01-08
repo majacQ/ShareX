@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -68,15 +68,6 @@ namespace ShareX.UploadersLib
         public PhotobucketAccountInfo PhotobucketAccountInfo { get; set; } = null;
 
         #endregion Photobucket
-
-        #region Google Photos
-
-        public OAuth2Info GooglePhotosOAuth2Info { get; set; } = null;
-        public OAuthUserInfo GooglePhotosUserInfo { get; set; } = null;
-        public string GooglePhotosAlbumID { get; set; } = "";
-        public bool GooglePhotosIsPublic { get; set; } = false;
-
-        #endregion Google Photos
 
         #region Chevereto
 
@@ -160,9 +151,6 @@ namespace ShareX.UploadersLib
         public bool DropboxAutoCreateShareableLink { get; set; } = true;
         public bool DropboxUseDirectLink { get; set; } = false;
 
-        // TEMP: For backward compatibility
-        public DropboxURLType DropboxURLType = DropboxURLType.Default;
-
         #endregion Dropbox
 
         #region FTP
@@ -179,22 +167,14 @@ namespace ShareX.UploadersLib
         public OAuth2Info OneDriveV2OAuth2Info { get; set; } = null;
         public OneDriveFileInfo OneDriveV2SelectedFolder { get; set; } = OneDrive.RootFolder;
         public bool OneDriveAutoCreateShareableLink { get; set; } = true;
+        public bool OneDriveUseDirectLink { get; set; } = false;
 
         #endregion OneDrive
-
-        #region Gfycat
-
-        public OAuth2Info GfycatOAuth2Info { get; set; } = null;
-        public AccountType GfycatAccountType { get; set; } = AccountType.Anonymous;
-        public bool GfycatIsPublic { get; set; } = false;
-        public bool GfycatKeepAudio { get; set; } = true;
-        public string GfycatTitle { get; set; } = "ShareX";
-
-        #endregion Gfycat
 
         #region Google Drive
 
         public OAuth2Info GoogleDriveOAuth2Info { get; set; } = null;
+        public OAuthUserInfo GoogleDriveUserInfo { get; set; } = null;
         public bool GoogleDriveIsPublic { get; set; } = true;
         public bool GoogleDriveDirectLink { get; set; } = false;
         public bool GoogleDriveUseFolder { get; set; } = false;
@@ -298,6 +278,7 @@ namespace ShareX.UploadersLib
         public bool OwnCloudDirectLink { get; set; } = false;
         public bool OwnCloud81Compatibility { get; set; } = true;
         public bool OwnCloudUsePreviewLinks { get; set; } = false;
+        public bool OwnCloudAppendFileNameToURL { get; set; } = false;
         public bool OwnCloudAutoExpire { get; set; } = false;
 
         #endregion ownCloud / Nextcloud
@@ -324,25 +305,11 @@ namespace ShareX.UploadersLib
 
         #endregion Lambda
 
-        #region Lithiio
+        #region LobFile
 
-        public LithiioSettings LithiioSettings { get; set; } = new LithiioSettings();
+        public LobFileSettings LithiioSettings { get; set; } = new LobFileSettings();
 
-        #endregion Lithiio
-
-        #region Teknik
-
-        public OAuth2Info TeknikOAuth2Info { get; set; } = null;
-        public string TeknikUploadAPIUrl { get; set; } = Teknik.DefaultUploadAPIURL;
-        public string TeknikPasteAPIUrl { get; set; } = Teknik.DefaultPasteAPIURL;
-        public string TeknikUrlShortenerAPIUrl { get; set; } = Teknik.DefaultUrlShortenerAPIURL;
-        public string TeknikAuthUrl { get; set; } = Teknik.DefaultAuthURL;
-        public TeknikExpirationUnit TeknikExpirationUnit { get; set; } = TeknikExpirationUnit.Never;
-        public int TeknikExpirationLength { get; set; } = 1;
-        public bool TeknikEncryption { get; set; } = false;
-        public bool TeknikGenerateDeletionKey { get; set; } = false;
-
-        #endregion Teknik
+        #endregion
 
         #region Pomf
 
@@ -380,7 +347,6 @@ namespace ShareX.UploadersLib
 
         #region Streamable
 
-        public bool StreamableAnonymous { get; set; } = true;
         public string StreamableUsername { get; set; } = "";
         [JsonEncrypt]
         public string StreamablePassword { get; set; } = "";
@@ -397,6 +363,7 @@ namespace ShareX.UploadersLib
         public string AzureStorageEnvironment { get; set; } = "blob.core.windows.net";
         public string AzureStorageCustomDomain { get; set; } = "";
         public string AzureStorageUploadPath { get; set; } = "";
+        public string AzureStorageCacheControl { get; set; } = "";
 
         #endregion Azure Storage
 
@@ -421,14 +388,17 @@ namespace ShareX.UploadersLib
         #region YouTube
 
         public OAuth2Info YouTubeOAuth2Info { get; set; } = null;
+        public OAuthUserInfo YouTubeUserInfo { get; set; } = null;
         public YouTubeVideoPrivacy YouTubePrivacyType { get; set; } = YouTubeVideoPrivacy.Public;
         public bool YouTubeUseShortenedLink { get; set; } = false;
+        public bool YouTubeShowDialog { get; set; } = false;
 
         #endregion YouTube
 
         #region Google Cloud Storage
 
         public OAuth2Info GoogleCloudStorageOAuth2Info { get; set; } = null;
+        public OAuthUserInfo GoogleCloudStorageUserInfo { get; set; } = null;
         public string GoogleCloudStorageBucket { get; set; } = "";
         public string GoogleCloudStorageDomain { get; set; } = "";
         public string GoogleCloudStorageObjectPrefix { get; set; } = "ShareX/%y/%mo";
@@ -460,14 +430,6 @@ namespace ShareX.UploadersLib
         public string YourlsPassword { get; set; } = "";
 
         #endregion yourls.org
-
-        #region adf.ly
-
-        public string AdFlyAPIUID { get; set; } = "";
-        [JsonEncrypt]
-        public string AdFlyAPIKEY { get; set; } = "";
-
-        #endregion adf.ly
 
         #region polr
 

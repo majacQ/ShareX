@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ namespace ShareX.UploadersLib
                     lvi.SubItems.Add(album.title ?? "");
                     lvi.SubItems.Add(album.description ?? "");
                     lvi.Selected = Config.ImgurSelectedAlbum != null && !string.IsNullOrEmpty(Config.ImgurSelectedAlbum.id) &&
-                        album.id.Equals(Config.ImgurSelectedAlbum.id, StringComparison.InvariantCultureIgnoreCase);
+                        album.id.Equals(Config.ImgurSelectedAlbum.id, StringComparison.OrdinalIgnoreCase);
                     lvi.Tag = album;
                     lvImgurAlbumList.Items.Add(lvi);
                 }
@@ -205,47 +205,6 @@ namespace ShareX.UploadersLib
 
         #endregion Photobucket
 
-        #region Google Photos
-
-        public void GooglePhotosRefreshAlbumList()
-        {
-            try
-            {
-                lvPicasaAlbumList.Items.Clear();
-
-                if (OAuth2Info.CheckOAuth(Config.GooglePhotosOAuth2Info))
-                {
-                    List<GooglePhotosAlbumInfo> albums = new GooglePhotos(Config.GooglePhotosOAuth2Info).GetAlbumList();
-
-                    if (albums != null && albums.Count > 0)
-                    {
-                        foreach (GooglePhotosAlbumInfo album in albums)
-                        {
-                            ListViewItem lvi = new ListViewItem(album.ID);
-                            lvi.SubItems.Add(album.Name ?? "");
-                            lvi.SubItems.Add(album.Summary ?? "");
-                            lvi.Tag = album;
-                            lvPicasaAlbumList.Items.Add(lvi);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.ShowError();
-            }
-        }
-
-        public void GooglePhotosCreateAlbum(string albumName)
-        {
-            if (OAuth2Info.CheckOAuth(Config.GooglePhotosOAuth2Info))
-            {
-                new GooglePhotos(Config.GooglePhotosOAuth2Info).CreateAlbum(albumName);
-            }
-        }
-
-        #endregion Google Photos
-
         #region Amazon S3
 
         private void UpdateAmazonS3Status()
@@ -282,7 +241,7 @@ namespace ShareX.UploadersLib
         private void UpdateAzureStorageStatus()
         {
             AzureStorage azure = new AzureStorage(Config.AzureStorageAccountName, Config.AzureStorageAccountAccessKey, Config.AzureStorageContainer,
-                Config.AzureStorageEnvironment, Config.AzureStorageCustomDomain, Config.AzureStorageUploadPath);
+                Config.AzureStorageEnvironment, Config.AzureStorageCustomDomain, Config.AzureStorageUploadPath, Config.AzureStorageCacheControl);
 
             lblAzureStorageURLPreview.Text = azure.GetPreviewURL();
         }
@@ -293,14 +252,13 @@ namespace ShareX.UploadersLib
 
         private void B2UpdateCustomDomainPreview()
         {
-            string uploadPath = NameParser.Parse(NameParserType.FolderPath, Config.B2UploadPath);
+            string uploadPath = NameParser.Parse(NameParserType.FilePath, Config.B2UploadPath);
             string url;
 
             if (cbB2CustomUrl.Checked)
             {
-                string customUrl = NameParser.Parse(NameParserType.FolderPath, Config.B2CustomUrl);
-                url = URLHelpers.CombineURL(customUrl, uploadPath, "example.png");
-                url = URLHelpers.FixPrefix(url, "https://");
+                url = URLHelpers.CombineURL(Config.B2CustomUrl, uploadPath, "example.png");
+                url = URLHelpers.FixPrefix(url);
             }
             else
             {
@@ -512,7 +470,7 @@ namespace ShareX.UploadersLib
         private void FTPUpdateEnabledStates()
         {
             cbFTPImage.Enabled = cbFTPText.Enabled = cbFTPFile.Enabled = cbFTPAccounts.Enabled = cbFTPAccounts.Items.Count > 0;
-            btnFTPRemove.Enabled = btnFTPDuplicate.Enabled = gbFTPAccount.Enabled = cbFTPAccounts.SelectedIndex > -1;
+            btnFTPRemove.Enabled = btnFTPDuplicate.Enabled = btnFTPTest.Enabled = gbFTPAccount.Enabled = cbFTPAccounts.SelectedIndex > -1;
 
             FTPAccount account = FTPGetSelectedAccount();
 
@@ -564,7 +522,7 @@ namespace ShareX.UploadersLib
             }
 
             txtFTPHost.Text = account.Host;
-            nudFTPPort.Value = account.Port;
+            nudFTPPort.SetValue(account.Port);
             txtFTPUsername.Text = account.Username;
             txtFTPPassword.Text = account.Password;
 
@@ -703,16 +661,18 @@ namespace ShareX.UploadersLib
         public UserPassBox SendSpaceRegister()
         {
             UserPassBox upb = new UserPassBox(Resources.UploadersConfigForm_SendSpaceRegister_SendSpace_Registration___, "John Doe", "john.doe@gmail.com", "JohnDoe", "");
-            upb.ShowDialog();
-            if (upb.DialogResult == DialogResult.OK)
+
+            if (upb.ShowDialog() == DialogResult.OK)
             {
                 SendSpace sendSpace = new SendSpace(APIKeys.SendSpaceKey);
                 upb.Success = sendSpace.AuthRegister(upb.UserName, upb.FullName, upb.Email, upb.Password);
+
                 if (!upb.Success && sendSpace.Errors.Count > 0)
                 {
                     MessageBox.Show(sendSpace.ToErrorString(), Resources.UploadersConfigForm_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
             return upb;
         }
 

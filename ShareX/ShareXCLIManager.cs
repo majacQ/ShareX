@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ using ShareX.HelpersLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShareX
 {
@@ -36,35 +37,39 @@ namespace ShareX
         {
         }
 
-        public void UseCommandLineArgs()
+        public async Task UseCommandLineArgs()
         {
-            UseCommandLineArgs(Commands);
+            await UseCommandLineArgs(Commands);
         }
 
-        public void UseCommandLineArgs(List<CLICommand> commands)
+        public async Task UseCommandLineArgs(List<CLICommand> commands)
         {
-            TaskSettings taskSettings = FindCLITask(commands);
-
-            foreach (CLICommand command in commands)
+            if (commands != null && commands.Count > 0)
             {
-                DebugHelper.WriteLine("CommandLine: " + command);
+                TaskSettings taskSettings = FindCLITask(commands);
 
-                if (command.IsCommand)
+                foreach (CLICommand command in commands)
                 {
-                    if (CheckCustomUploader(command) || CheckImageEffect(command) || CheckCLIHotkey(command) || CheckCLIWorkflow(command))
+                    DebugHelper.WriteLine("CommandLine: " + command);
+
+                    if (command.IsCommand)
                     {
+                        if (CheckCustomUploader(command) || CheckImageEffect(command) || await CheckCLIHotkey(command) || await CheckCLIWorkflow(command) ||
+                            await CheckNativeMessagingInput(command))
+                        {
+                        }
+
+                        continue;
                     }
 
-                    continue;
-                }
-
-                if (URLHelpers.IsValidURL(command.Command))
-                {
-                    UploadManager.DownloadAndUploadFile(command.Command, taskSettings);
-                }
-                else
-                {
-                    UploadManager.UploadFile(command.Command, taskSettings);
+                    if (URLHelpers.IsValidURL(command.Command))
+                    {
+                        UploadManager.DownloadAndUploadFile(command.Command, taskSettings);
+                    }
+                    else
+                    {
+                        UploadManager.UploadFile(command.Command, taskSettings);
+                    }
                 }
             }
         }
@@ -81,7 +86,7 @@ namespace ShareX
                     {
                         if (command.Parameter == hotkeySetting.TaskSettings.ToString())
                         {
-                            return hotkeySetting.TaskSettings;
+                            return TaskSettings.GetSafeTaskSettings(hotkeySetting.TaskSettings);
                         }
                     }
                 }
@@ -92,7 +97,7 @@ namespace ShareX
 
         private bool CheckCustomUploader(CLICommand command)
         {
-            if (command.Command.Equals("CustomUploader", StringComparison.InvariantCultureIgnoreCase))
+            if (command.Command.Equals("CustomUploader", StringComparison.OrdinalIgnoreCase))
             {
                 if (!string.IsNullOrEmpty(command.Parameter) && command.Parameter.EndsWith(".sxcu", StringComparison.OrdinalIgnoreCase))
                 {
@@ -107,7 +112,7 @@ namespace ShareX
 
         private bool CheckImageEffect(CLICommand command)
         {
-            if (command.Command.Equals("ImageEffect", StringComparison.InvariantCultureIgnoreCase))
+            if (command.Command.Equals("ImageEffect", StringComparison.OrdinalIgnoreCase))
             {
                 if (!string.IsNullOrEmpty(command.Parameter) && command.Parameter.EndsWith(".sxie", StringComparison.OrdinalIgnoreCase))
                 {
@@ -120,13 +125,14 @@ namespace ShareX
             return false;
         }
 
-        private bool CheckCLIHotkey(CLICommand command)
+        private async Task<bool> CheckCLIHotkey(CLICommand command)
         {
             foreach (HotkeyType job in Helpers.GetEnums<HotkeyType>())
             {
                 if (command.CheckCommand(job.ToString()))
                 {
-                    TaskHelpers.ExecuteJob(job, command);
+                    await TaskHelpers.ExecuteJob(job, command);
+
                     return true;
                 }
             }
@@ -134,7 +140,7 @@ namespace ShareX
             return false;
         }
 
-        private bool CheckCLIWorkflow(CLICommand command)
+        private async Task<bool> CheckCLIWorkflow(CLICommand command)
         {
             if (Program.HotkeysConfig != null && command.CheckCommand("workflow") && !string.IsNullOrEmpty(command.Parameter))
             {
@@ -144,11 +150,27 @@ namespace ShareX
                     {
                         if (command.Parameter == hotkeySetting.TaskSettings.ToString())
                         {
-                            TaskHelpers.ExecuteJob(hotkeySetting.TaskSettings);
+                            await TaskHelpers.ExecuteJob(hotkeySetting.TaskSettings);
+
                             return true;
                         }
                     }
                 }
+            }
+
+            return false;
+        }
+
+        private async Task<bool> CheckNativeMessagingInput(CLICommand command)
+        {
+            if (command.Command.Equals("NativeMessagingInput", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrEmpty(command.Parameter) && command.Parameter.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                {
+                    await TaskHelpers.HandleNativeMessagingInput(command.Parameter);
+                }
+
+                return true;
             }
 
             return false;

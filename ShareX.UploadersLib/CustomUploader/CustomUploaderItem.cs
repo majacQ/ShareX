@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -30,7 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows.Forms;
+using System.Linq;
+using System.Text;
 
 namespace ShareX.UploadersLib
 {
@@ -49,10 +50,6 @@ namespace ShareX.UploadersLib
 
         [DefaultValue(HttpMethod.POST), JsonProperty(DefaultValueHandling = DefaultValueHandling.Include)]
         public HttpMethod RequestMethod { get; set; } = HttpMethod.POST;
-
-        // For backward compatibility
-        [JsonProperty]
-        private HttpMethod RequestType { set => RequestMethod = value; }
 
         [DefaultValue("")]
         public string RequestURL { get; set; }
@@ -86,14 +83,6 @@ namespace ShareX.UploadersLib
 
         public bool ShouldSerializeData() => (Body == CustomUploaderBody.JSON || Body == CustomUploaderBody.XML) && !string.IsNullOrEmpty(Data);
 
-        // For backward compatibility
-        public ResponseType ResponseType { private get; set; }
-
-        [DefaultValue(null)]
-        public List<string> RegexList { get; set; }
-
-        public bool ShouldSerializeRegexList() => RegexList != null && RegexList.Count > 0;
-
         [DefaultValue("")]
         public string URL { get; set; }
 
@@ -114,7 +103,7 @@ namespace ShareX.UploadersLib
         {
             return new CustomUploaderItem()
             {
-                Version = Application.ProductVersion,
+                Version = Helpers.GetApplicationVersion(),
                 RequestMethod = HttpMethod.POST,
                 Body = CustomUploaderBody.MultipartFormData
             };
@@ -149,7 +138,7 @@ namespace ShareX.UploadersLib
                 throw new Exception(Resources.CustomUploaderItem_GetRequestURL_RequestURLMustBeConfigured);
             }
 
-            CustomUploaderParser parser = new CustomUploaderParser(input);
+            ShareXCustomUploaderSyntaxParser parser = new ShareXCustomUploaderSyntaxParser(input);
             parser.URLEncode = true;
             string url = parser.Parse(RequestURL);
 
@@ -165,7 +154,7 @@ namespace ShareX.UploadersLib
 
             if (Parameters != null)
             {
-                CustomUploaderParser parser = new CustomUploaderParser(input);
+                ShareXCustomUploaderSyntaxParser parser = new ShareXCustomUploaderSyntaxParser(input);
                 parser.UseNameParser = true;
 
                 foreach (KeyValuePair<string, string> parameter in Parameters)
@@ -198,12 +187,32 @@ namespace ShareX.UploadersLib
 
         public string GetData(CustomUploaderInput input)
         {
-            CustomUploaderParser parser = new CustomUploaderParser(input);
-            parser.UseNameParser = true;
-            parser.JSONEncode = Body == CustomUploaderBody.JSON;
-            parser.XMLEncode = Body == CustomUploaderBody.XML;
+            NameParser nameParser = new NameParser(NameParserType.Text);
+            string result = nameParser.Parse(Data);
 
-            return parser.Parse(Data);
+            Dictionary<string, string> replace = new Dictionary<string, string>();
+            replace.Add("{input}", EncodeBodyData(input.Input));
+            replace.Add("{filename}", EncodeBodyData(input.FileName));
+            result = result.BatchReplace(replace, StringComparison.OrdinalIgnoreCase);
+
+            return result;
+        }
+
+        private string EncodeBodyData(string input)
+        {
+            if (!string.IsNullOrEmpty(input))
+            {
+                if (Body == CustomUploaderBody.JSON)
+                {
+                    return URLHelpers.JSONEncode(input);
+                }
+                else if (Body == CustomUploaderBody.XML)
+                {
+                    return URLHelpers.XMLEncode(input);
+                }
+            }
+
+            return input;
         }
 
         public string GetFileFormName()
@@ -222,7 +231,7 @@ namespace ShareX.UploadersLib
 
             if (Arguments != null)
             {
-                CustomUploaderParser parser = new CustomUploaderParser(input);
+                ShareXCustomUploaderSyntaxParser parser = new ShareXCustomUploaderSyntaxParser(input);
                 parser.UseNameParser = true;
 
                 foreach (KeyValuePair<string, string> arg in Arguments)
@@ -240,7 +249,7 @@ namespace ShareX.UploadersLib
             {
                 NameValueCollection collection = new NameValueCollection();
 
-                CustomUploaderParser parser = new CustomUploaderParser(input);
+                ShareXCustomUploaderSyntaxParser parser = new ShareXCustomUploaderSyntaxParser(input);
                 parser.UseNameParser = true;
 
                 foreach (KeyValuePair<string, string> header in Headers)
@@ -254,7 +263,7 @@ namespace ShareX.UploadersLib
             return null;
         }
 
-        public void ParseResponse(UploadResult result, ResponseInfo responseInfo, CustomUploaderInput input, bool isShortenedURL = false)
+        public void ParseResponse(UploadResult result, ResponseInfo responseInfo, UploaderErrorManager errors, CustomUploaderInput input, bool isShortenedURL = false)
         {
             if (result != null && responseInfo != null)
             {
@@ -265,9 +274,12 @@ namespace ShareX.UploadersLib
                     responseInfo.ResponseText = "";
                 }
 
-                CustomUploaderParser parser = new CustomUploaderParser(responseInfo, RegexList);
-                parser.Filename = input.Filename;
-                parser.URLEncode = true;
+                ShareXCustomUploaderSyntaxParser parser = new ShareXCustomUploaderSyntaxParser()
+                {
+                    FileName = input.FileName,
+                    ResponseInfo = responseInfo,
+                    URLEncode = true
+                };
 
                 if (responseInfo.IsSuccess)
                 {
@@ -276,6 +288,11 @@ namespace ShareX.UploadersLib
                     if (!string.IsNullOrEmpty(URL))
                     {
                         url = parser.Parse(URL);
+
+                        if (string.IsNullOrEmpty(url) && !string.IsNullOrEmpty(URL) && URL.Contains("{output:"))
+                        {
+                            result.IsURLExpected = false;
+                        }
                     }
                     else
                     {
@@ -302,97 +319,114 @@ namespace ShareX.UploadersLib
 
                         if (!string.IsNullOrEmpty(parsedErrorMessage))
                         {
-                            result.Errors.Add("Custom uploader error message:" + Environment.NewLine + parsedErrorMessage);
+                            errors.AddFirst(parsedErrorMessage);
                         }
                     }
                 }
             }
         }
 
-        public void TryParseResponse(UploadResult result, ResponseInfo responseInfo, CustomUploaderInput input, bool isShortenedURL = false)
+        public void TryParseResponse(UploadResult result, ResponseInfo responseInfo, UploaderErrorManager errors, CustomUploaderInput input, bool isShortenedURL = false)
         {
             try
             {
-                ParseResponse(result, responseInfo, input, isShortenedURL);
+                ParseResponse(result, responseInfo, errors, input, isShortenedURL);
             }
             catch (JsonReaderException e)
             {
                 string hostName = URLHelpers.GetHostName(RequestURL);
-                result.Errors.Add($"Custom uploader error. Invalid response content is returned from host ({hostName}), expected response content is JSON." +
+                errors.AddFirst($"Invalid response content is returned from host ({hostName}), expected response content is JSON." +
                     Environment.NewLine + Environment.NewLine + e);
             }
             catch (Exception e)
             {
                 string hostName = URLHelpers.GetHostName(RequestURL);
-                result.Errors.Add($"Custom uploader error. Unable to parse response content returned from host ({hostName})." +
+                errors.AddFirst($"Unable to parse response content returned from host ({hostName})." +
                     Environment.NewLine + Environment.NewLine + e);
             }
         }
 
         public void CheckBackwardCompatibility()
         {
-            CheckRequestURL();
-
             if (string.IsNullOrEmpty(Version) || Helpers.CompareVersion(Version, "12.3.1") <= 0)
             {
-                if (RequestMethod == HttpMethod.POST)
-                {
-                    Body = CustomUploaderBody.MultipartFormData;
-                }
-                else
-                {
-                    Body = CustomUploaderBody.None;
-
-                    if (Arguments != null)
-                    {
-                        if (Parameters == null)
-                        {
-                            Parameters = new Dictionary<string, string>();
-                        }
-
-                        foreach (KeyValuePair<string, string> pair in Arguments)
-                        {
-                            if (!Parameters.ContainsKey(pair.Key))
-                            {
-                                Parameters.Add(pair.Key, pair.Value);
-                            }
-                        }
-
-                        Arguments = null;
-                    }
-                }
-
-                if (ResponseType == ResponseType.RedirectionURL)
-                {
-                    if (string.IsNullOrEmpty(URL))
-                    {
-                        URL = "$responseurl$";
-                    }
-
-                    URL = URL.Replace("$response$", "$responseurl$");
-                    ThumbnailURL = ThumbnailURL?.Replace("$response$", "$responseurl$");
-                    DeletionURL = DeletionURL?.Replace("$response$", "$responseurl$");
-                }
-                else if (ResponseType == ResponseType.Headers)
-                {
-                    URL = "Response type option is deprecated, please use \\$header:header_name\\$ syntax instead.";
-                }
-                else if (ResponseType == ResponseType.LocationHeader)
-                {
-                    if (string.IsNullOrEmpty(URL))
-                    {
-                        URL = "$header:Location$";
-                    }
-
-                    URL = URL.Replace("$response$", "$header:Location$");
-                    ThumbnailURL = ThumbnailURL?.Replace("$response$", "$header:Location$");
-                    DeletionURL = DeletionURL?.Replace("$response$", "$header:Location$");
-                }
-
-                ResponseType = ResponseType.Text;
-
-                Version = Application.ProductVersion;
+                throw new Exception("Unsupported custom uploader" + ": " + ToString());
             }
+
+            CheckRequestURL();
+
+            if (Helpers.CompareVersion(Version, "13.7.1") <= 0)
+            {
+                RequestURL = MigrateOldSyntax(RequestURL);
+
+                if (Parameters != null)
+                {
+                    foreach (string key in Parameters.Keys.ToList())
+                    {
+                        Parameters[key] = MigrateOldSyntax(Parameters[key]);
+                    }
+                }
+
+                if (Headers != null)
+                {
+                    foreach (string key in Headers.Keys.ToList())
+                    {
+                        Headers[key] = MigrateOldSyntax(Headers[key]);
+                    }
+                }
+
+                if (Arguments != null)
+                {
+                    foreach (string key in Arguments.Keys.ToList())
+                    {
+                        Arguments[key] = MigrateOldSyntax(Arguments[key]);
+                    }
+                }
+
+                Data = Data.Replace("$input$", "{input}", StringComparison.OrdinalIgnoreCase).
+                    Replace("$filename$", "{filename}", StringComparison.OrdinalIgnoreCase);
+                URL = MigrateOldSyntax(URL);
+                ThumbnailURL = MigrateOldSyntax(ThumbnailURL);
+                DeletionURL = MigrateOldSyntax(DeletionURL);
+                ErrorMessage = MigrateOldSyntax(ErrorMessage);
+
+                Version = Helpers.GetApplicationVersion();
+            }
+        }
+
+        private string MigrateOldSyntax(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            StringBuilder sbInput = new StringBuilder();
+
+            bool start = true;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == '$')
+                {
+                    sbInput.Append(start ? '{' : '}');
+                    start = !start;
+                    continue;
+                }
+                else if (input[i] == '\\')
+                {
+                    i++;
+                    continue;
+                }
+                else if (input[i] == '{' || input[i] == '}')
+                {
+                    sbInput.Append('\\');
+                }
+
+                sbInput.Append(input[i]);
+            }
+
+            return sbInput.ToString();
         }
 
         private void CheckRequestURL()

@@ -182,9 +182,6 @@
   <data name="lblStreamablePassword.Text" xml:space="preserve">
     <value>Пароль:</value>
   </data>
-  <data name="cbStreamableAnonymous.Text" xml:space="preserve">
-    <value>Аноним</value>
-  </data>
   <data name="tpSharedFolder.Text" xml:space="preserve">
     <value>Общая папка</value>
   </data>
@@ -385,7 +382,7 @@
     <value>Создать общественный URL</value>
   </data>
   <data name="cbOwnCloudDirectLink.Text" xml:space="preserve">
-    <value>Прямая ссылка (Добавить "&amp;&amp;download" к адресу)</value>
+    <value>Прямая ссылка</value>
   </data>
   <data name="cbOwnCloud81Compatibility.Text" xml:space="preserve">
     <value>Совместимость с ownCloud 8.1+</value>
@@ -451,7 +448,7 @@
     <value>Заметка: Двойной клин по имени папки откроет ее.</value>
   </data>
   <data name="cbGoogleDriveIsPublic.Text" xml:space="preserve">
-    <value>Публичная загрузка?</value>
+    <value>Публичная загрузка</value>
   </data>
   <data name="btnGoogleDriveRefreshFolders.Text" xml:space="preserve">
     <value>Обновить список папок</value>
@@ -719,9 +716,6 @@
   </data>
   <data name="lblGistCustomURL.Text" xml:space="preserve">
     <value>Пользовательский домен:</value>
-  </data>
-  <data name="cbGfycatIsPublic.Text" xml:space="preserve">
-    <value>Публичная загрузка</value>
   </data>
   <data name="lblPlikUsername.Text" xml:space="preserve">
     <value>Имя пользователя:</value>
@@ -1023,9 +1017,6 @@
   <data name="lblGooglePhotosCreateAlbumName.Text" xml:space="preserve">
     <value>Имя альбома:</value>
   </data>
-  <data name="cbGfycatKeepAudio.Text" xml:space="preserve">
-    <value>Оставлять звук</value>
-  </data>
   <data name="cbGooglePhotosIsPublic.Text" xml:space="preserve">
     <value>Публичная загрузка</value>
   </data>
@@ -1071,9 +1062,6 @@
   <data name="cbPlikTTLUnit.Items3" xml:space="preserve">
     <value>никогда</value>
   </data>
-  <data name="lblGfycatTitle.Text" xml:space="preserve">
-    <value>Заголовок:</value>
-  </data>
   <data name="lblZWSToken.Text" xml:space="preserve">
     <value>Токен:</value>
   </data>
@@ -1088,5 +1076,20 @@
   </data>
   <data name="cbAmazonS3SignedPayload.Text" xml:space="preserve">
     <value>Подписывать отправку</value>
+  </data>
+  <data name="cbYouTubeShowDialog.Text" xml:space="preserve">
+    <value>Показывать диалог параметров видео</value>
+  </data>
+  <data name="lblYouTubePermissionsTip.Text" xml:space="preserve">
+    <value>Вы можете отозвать доступ в любое время по ссылке ниже:</value>
+  </data>
+  <data name="cbOwnCloudAppendFileNameToURL.Text" xml:space="preserve">
+    <value>Добавлять имя файла в конец ссылки</value>
+  </data>
+  <data name="lblAzureStorageCacheControl.Text" xml:space="preserve">
+    <value>Cache-Control заголовок:</value>
+  </data>
+  <data name="cbOneDriveUseDirectLink.Text" xml:space="preserve">
+    <value>Использовать прямую ссылку</value>
   </data>
 </root>

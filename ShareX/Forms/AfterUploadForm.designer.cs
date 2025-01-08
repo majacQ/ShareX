@@ -46,11 +46,13 @@
             // pbPreview
             // 
             resources.ApplyResources(this.pbPreview, "pbPreview");
+            this.pbPreview.BackColor = System.Drawing.SystemColors.Window;
             this.pbPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbPreview.DrawCheckeredBackground = true;
             this.pbPreview.EnableRightClickMenu = true;
             this.pbPreview.FullscreenOnClick = true;
             this.pbPreview.Name = "pbPreview";
+            this.pbPreview.PictureBoxBackColor = System.Drawing.SystemColors.Window;
             this.pbPreview.ShowImageSizeLabel = true;
             // 
             // btnCopyImage
@@ -90,7 +92,6 @@
             // 
             // tmrClose
             // 
-            this.tmrClose.Enabled = true;
             this.tmrClose.Interval = 60000;
             this.tmrClose.Tick += new System.EventHandler(this.tmrClose_Tick);
             // 
@@ -111,6 +112,7 @@
             this.chFormat});
             this.lvClipboardFormats.FullRowSelect = true;
             this.lvClipboardFormats.GridLines = true;
+            this.lvClipboardFormats.HideSelection = false;
             this.lvClipboardFormats.Name = "lvClipboardFormats";
             this.lvClipboardFormats.UseCompatibleStateImageBehavior = false;
             this.lvClipboardFormats.View = System.Windows.Forms.View.Details;
@@ -127,10 +129,8 @@
             // AfterUploadForm
             // 
             resources.ApplyResources(this, "$this");
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.CancelButton = this.btnClose;
             this.Controls.Add(this.lvClipboardFormats);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnOpenLink);

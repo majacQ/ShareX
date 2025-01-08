@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -30,26 +30,40 @@ namespace ShareX.HelpersLib
 {
     public partial class OutputBox : Form
     {
-        public OutputBox(string text, string title)
+        public bool ScrollToEnd { get; private set; }
+
+        private OutputBox(string text, string title, bool scrollToEnd = false)
         {
             InitializeComponent();
-            ShareXResources.ApplyTheme(this);
+            rtbText.AddContextMenu();
+            ShareXResources.ApplyTheme(this, true);
 
             Text = "ShareX - " + title;
-            txtText.Text = text;
+            rtbText.Text = text;
+            ScrollToEnd = scrollToEnd;
+        }
+
+        public static void Show(string text, string title, bool scrollToEnd = false)
+        {
+            using (OutputBox outputBox = new OutputBox(text, title, scrollToEnd))
+            {
+                outputBox.ShowDialog();
+            }
         }
 
         private void OutputBox_Shown(object sender, EventArgs e)
         {
-            txtText.SelectionStart = txtText.TextLength;
-            txtText.ScrollToCaret();
-        }
+            this.ForceActivate();
 
-        private void txtText_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+            rtbText.SelectionStart = rtbText.TextLength;
+
+            if (ScrollToEnd)
             {
-                Close();
+                NativeMethods.SendMessage(rtbText.Handle, (int)WindowsMessages.VSCROLL, (int)ScrollBarCommands.SB_BOTTOM, 0);
+            }
+            else
+            {
+                NativeMethods.SendMessage(rtbText.Handle, (int)WindowsMessages.VSCROLL, (int)ScrollBarCommands.SB_TOP, 0);
             }
         }
     }

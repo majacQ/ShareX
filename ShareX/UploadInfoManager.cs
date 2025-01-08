@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
 
 #endregion License Information (GPL v3)
 
-using Microsoft.VisualBasic.FileIO;
 using ShareX.HelpersLib;
 using ShareX.UploadersLib;
 using System.Collections.Generic;
@@ -116,17 +115,17 @@ namespace ShareX
 
         public void OpenFile()
         {
-            if (IsItemSelected && SelectedItem.IsFileExist) Helpers.OpenFile(SelectedItem.Info.FilePath);
+            if (IsItemSelected && SelectedItem.IsFileExist) FileHelpers.OpenFile(SelectedItem.Info.FilePath);
         }
 
         public void OpenThumbnailFile()
         {
-            if (IsItemSelected && SelectedItem.IsThumbnailFileExist) Helpers.OpenFile(SelectedItem.Info.ThumbnailFilePath);
+            if (IsItemSelected && SelectedItem.IsThumbnailFileExist) FileHelpers.OpenFile(SelectedItem.Info.ThumbnailFilePath);
         }
 
         public void OpenFolder()
         {
-            if (IsItemSelected && SelectedItem.IsFileExist) Helpers.OpenFolderWithFile(SelectedItem.Info.FilePath);
+            if (IsItemSelected && SelectedItem.IsFileExist) FileHelpers.OpenFolderWithFile(SelectedItem.Info.FilePath);
         }
 
         public void TryOpen()
@@ -145,7 +144,7 @@ namespace ShareX
                 }
                 else if (SelectedItem.IsFilePathValid)
                 {
-                    Helpers.OpenFile(SelectedItem.Info.FilePath);
+                    FileHelpers.OpenFile(SelectedItem.Info.FilePath);
                 }
             }
         }
@@ -343,21 +342,28 @@ namespace ShareX
             if (IsItemSelected && SelectedItem.IsImageFile) TaskHelpers.AnnotateImageFromFile(SelectedItem.Info.FilePath);
         }
 
+        public void BeautifyImage()
+        {
+            if (IsItemSelected && SelectedItem.IsImageFile) TaskHelpers.OpenImageBeautifier(SelectedItem.Info.FilePath);
+        }
+
         public void AddImageEffects()
         {
             if (IsItemSelected && SelectedItem.IsImageFile) TaskHelpers.OpenImageEffects(SelectedItem.Info.FilePath);
+        }
+
+        public void PinToScreen()
+        {
+            if (IsItemSelected && SelectedItem.IsImageFile) TaskHelpers.PinToScreen(SelectedItem.Info.FilePath);
         }
 
         public void DeleteFiles()
         {
             if (IsItemSelected)
             {
-                foreach (string filepath in SelectedItems.Select(x => x.Info.FilePath))
+                foreach (string filePath in SelectedItems.Select(x => x.Info.FilePath))
                 {
-                    if (!string.IsNullOrEmpty(filepath) && File.Exists(filepath))
-                    {
-                        FileSystem.DeleteFile(filepath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                    }
+                    FileHelpers.DeleteFile(filePath, true);
                 }
             }
         }
@@ -372,9 +378,9 @@ namespace ShareX
             if (IsItemSelected && SelectedItem.IsURLExist) UploadManager.ShareURL(SelectedItem.Info.Result.ToString(), urlSharingService);
         }
 
-        public void SearchImageUsingGoogle()
+        public void SearchImageUsingGoogleLens()
         {
-            if (IsItemSelected && SelectedItem.IsURLExist) TaskHelpers.SearchImageUsingGoogle(SelectedItem.Info.Result.URL);
+            if (IsItemSelected && SelectedItem.IsURLExist) TaskHelpers.SearchImageUsingGoogleLens(SelectedItem.Info.Result.URL);
         }
 
         public void SearchImageUsingBing()

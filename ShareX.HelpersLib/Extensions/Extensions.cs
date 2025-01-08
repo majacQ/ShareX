@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -129,9 +128,9 @@ namespace ShareX.HelpersLib
             return rect.Width > 0 && rect.Height > 0;
         }
 
-        public static Point Add(this Point point, int offset)
+        public static bool IsValid(this RectangleF rect)
         {
-            return point.Add(offset, offset);
+            return rect.Width > 0 && rect.Height > 0;
         }
 
         public static Point Add(this Point point, int offsetX, int offsetY)
@@ -142,6 +141,42 @@ namespace ShareX.HelpersLib
         public static Point Add(this Point point, Point offset)
         {
             return new Point(point.X + offset.X, point.Y + offset.Y);
+        }
+
+        public static Point Add(this Point point, int offset)
+        {
+            return point.Add(offset, offset);
+        }
+
+        public static PointF Add(this PointF point, float offsetX, float offsetY)
+        {
+            return new PointF(point.X + offsetX, point.Y + offsetY);
+        }
+
+        public static PointF Add(this PointF point, PointF offset)
+        {
+            return new PointF(point.X + offset.X, point.Y + offset.Y);
+        }
+
+        public static PointF Scale(this Point point, float scaleFactor)
+        {
+            return new PointF(point.X * scaleFactor, point.Y * scaleFactor);
+        }
+
+        public static PointF Scale(this PointF point, float scaleFactor)
+        {
+            return new PointF(point.X * scaleFactor, point.Y * scaleFactor);
+        }
+
+        public static Point Round(this PointF point)
+        {
+            return Point.Round(point);
+        }
+
+        public static void Offset(this PointF point, PointF offset)
+        {
+            point.X += offset.X;
+            point.Y += offset.Y;
         }
 
         public static Size Offset(this Size size, int offset)
@@ -159,9 +194,34 @@ namespace ShareX.HelpersLib
             return new Rectangle(rect.X - offset, rect.Y - offset, rect.Width + (offset * 2), rect.Height + (offset * 2));
         }
 
+        public static RectangleF Offset(this RectangleF rect, float offset)
+        {
+            return new RectangleF(rect.X - offset, rect.Y - offset, rect.Width + (offset * 2), rect.Height + (offset * 2));
+        }
+
+        public static RectangleF Scale(this RectangleF rect, float scaleFactor)
+        {
+            return new RectangleF(rect.X * scaleFactor, rect.Y * scaleFactor, rect.Width * scaleFactor, rect.Height * scaleFactor);
+        }
+
+        public static Rectangle Round(this RectangleF rect)
+        {
+            return Rectangle.Round(rect);
+        }
+
         public static Rectangle LocationOffset(this Rectangle rect, int x, int y)
         {
             return new Rectangle(rect.X + x, rect.Y + y, rect.Width, rect.Height);
+        }
+
+        public static RectangleF LocationOffset(this RectangleF rect, float x, float y)
+        {
+            return new RectangleF(rect.X + x, rect.Y + y, rect.Width, rect.Height);
+        }
+
+        public static RectangleF LocationOffset(this RectangleF rect, PointF offset)
+        {
+            return rect.LocationOffset(offset.X, offset.Y);
         }
 
         public static Rectangle LocationOffset(this Rectangle rect, Point offset)
@@ -179,7 +239,17 @@ namespace ShareX.HelpersLib
             return new Rectangle(rect.X, rect.Y, rect.Width + width, rect.Height + height);
         }
 
+        public static RectangleF SizeOffset(this RectangleF rect, float width, float height)
+        {
+            return new RectangleF(rect.X, rect.Y, rect.Width + width, rect.Height + height);
+        }
+
         public static Rectangle SizeOffset(this Rectangle rect, int offset)
+        {
+            return rect.SizeOffset(offset, offset);
+        }
+
+        public static RectangleF SizeOffset(this RectangleF rect, float offset)
         {
             return rect.SizeOffset(offset, offset);
         }
@@ -198,168 +268,6 @@ namespace ShareX.HelpersLib
             }
 
             return sb.ToString();
-        }
-
-        public static void BeginUpdate(this RichTextBox rtb)
-        {
-            NativeMethods.SendMessage(rtb.Handle, (int)WindowsMessages.SETREDRAW, 0, 0);
-        }
-
-        public static void EndUpdate(this RichTextBox rtb)
-        {
-            NativeMethods.SendMessage(rtb.Handle, (int)WindowsMessages.SETREDRAW, 1, 0);
-            rtb.Invalidate();
-        }
-
-        public static void AddContextMenu(this RichTextBox rtb)
-        {
-            if (rtb.ContextMenuStrip == null)
-            {
-                ContextMenuStrip cms = new ContextMenuStrip()
-                {
-                    ShowImageMargin = false
-                };
-
-                ToolStripMenuItem tsmiUndo = new ToolStripMenuItem(Resources.Extensions_AddContextMenu_Undo);
-                tsmiUndo.Click += (sender, e) => rtb.Undo();
-                cms.Items.Add(tsmiUndo);
-
-                ToolStripMenuItem tsmiRedo = new ToolStripMenuItem(Resources.Extensions_AddContextMenu_Redo);
-                tsmiRedo.Click += (sender, e) => rtb.Redo();
-                cms.Items.Add(tsmiRedo);
-
-                cms.Items.Add(new ToolStripSeparator());
-
-                ToolStripMenuItem tsmiCut = new ToolStripMenuItem(Resources.Extensions_AddContextMenu_Cut);
-                tsmiCut.Click += (sender, e) => rtb.Cut();
-                cms.Items.Add(tsmiCut);
-
-                ToolStripMenuItem tsmiCopy = new ToolStripMenuItem(Resources.Extensions_AddContextMenu_Copy);
-                tsmiCopy.Click += (sender, e) => rtb.Copy();
-                cms.Items.Add(tsmiCopy);
-
-                ToolStripMenuItem tsmiPaste = new ToolStripMenuItem(Resources.Extensions_AddContextMenu_Paste);
-                tsmiPaste.Click += (sender, e) => rtb.Paste();
-                cms.Items.Add(tsmiPaste);
-
-                ToolStripMenuItem tsmiDelete = new ToolStripMenuItem(Resources.Extensions_AddContextMenu_Delete);
-                tsmiDelete.Click += (sender, e) => rtb.SelectedText = "";
-                cms.Items.Add(tsmiDelete);
-
-                cms.Items.Add(new ToolStripSeparator());
-
-                ToolStripMenuItem tsmiSelectAll = new ToolStripMenuItem(Resources.Extensions_AddContextMenu_SelectAll);
-                tsmiSelectAll.Click += (sender, e) => rtb.SelectAll();
-                cms.Items.Add(tsmiSelectAll);
-
-                cms.Opening += (sender, e) =>
-                {
-                    tsmiUndo.Enabled = !rtb.ReadOnly && rtb.CanUndo;
-                    tsmiRedo.Enabled = !rtb.ReadOnly && rtb.CanRedo;
-                    tsmiCut.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
-                    tsmiCopy.Enabled = rtb.SelectionLength > 0;
-                    tsmiPaste.Enabled = !rtb.ReadOnly && ClipboardHelpers.ContainsText();
-                    tsmiDelete.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
-                    tsmiSelectAll.Enabled = rtb.TextLength > 0 && rtb.SelectionLength < rtb.TextLength;
-                };
-
-                rtb.ContextMenuStrip = cms;
-            }
-        }
-
-        public static void SupportSelectAll(this TextBox tb)
-        {
-            tb.KeyDown += (sender, e) =>
-            {
-                if (e.Control && e.KeyCode == Keys.A)
-                {
-                    tb.SelectAll();
-                    e.SuppressKeyPress = true;
-                    e.Handled = true;
-                }
-            };
-        }
-
-        public static long ToUnix(this DateTime dateTime)
-        {
-            return Helpers.DateTimeToUnix(dateTime);
-        }
-
-        public static void AppendTextToSelection(this TextBoxBase tb, string text)
-        {
-            if (!string.IsNullOrEmpty(text))
-            {
-                int start = tb.SelectionStart;
-                tb.Text = tb.Text.Insert(start, text);
-                tb.SelectionStart = start + text.Length;
-            }
-        }
-
-        public static void RadioCheck(this ToolStripMenuItem tsmi)
-        {
-            ToolStripDropDownItem tsddiParent = tsmi.OwnerItem as ToolStripDropDownItem;
-
-            foreach (ToolStripMenuItem tsmiChild in tsddiParent.DropDownItems.OfType<ToolStripMenuItem>())
-            {
-                tsmiChild.Checked = tsmiChild == tsmi;
-            }
-        }
-
-        public static void RadioCheck(this ToolStripButton tsb)
-        {
-            ToolStrip parent = tsb.GetCurrentParent();
-
-            foreach (ToolStripButton tsbParent in parent.Items.OfType<ToolStripButton>())
-            {
-                if (tsbParent != tsb)
-                {
-                    tsbParent.Checked = false;
-                }
-            }
-
-            tsb.Checked = true;
-        }
-
-        public static void UpdateCheckedAll(this ToolStripMenuItem tsmi, bool check)
-        {
-            foreach (ToolStripMenuItem tsmiChild in tsmi.DropDownItems.OfType<ToolStripMenuItem>())
-            {
-                tsmiChild.Checked = check;
-            }
-        }
-
-        public static void InvokeSafe(this Control control, Action action)
-        {
-            if (control != null && !control.IsDisposed)
-            {
-                if (control.InvokeRequired)
-                {
-                    control.Invoke(action);
-                }
-                else
-                {
-                    action();
-                }
-            }
-        }
-
-        public static void ForceActivate(this Form form)
-        {
-            if (!form.IsDisposed)
-            {
-                if (!form.Visible)
-                {
-                    form.Show();
-                }
-
-                if (form.WindowState == FormWindowState.Minimized)
-                {
-                    form.WindowState = FormWindowState.Normal;
-                }
-
-                form.BringToFront();
-                form.Activate();
-            }
         }
 
         public static int WeekOfYear(this DateTime dateTime)
@@ -392,58 +300,6 @@ namespace ShareX.HelpersLib
             }
         }
 
-        public static void MoveUp(this ListViewItem lvi)
-        {
-            ListView lv = lvi.ListView;
-
-            if (lv.Items.Count > 1)
-            {
-                int index = lvi.Index;
-
-                if (index == 0)
-                {
-                    index = lv.Items.Count - 1;
-                }
-                else
-                {
-                    index--;
-                }
-
-                lv.Items.Remove(lvi);
-                lv.Items.Insert(index, lvi);
-            }
-
-            lv.Focus();
-            lvi.EnsureVisible();
-            lvi.Selected = true;
-        }
-
-        public static void MoveDown(this ListViewItem lvi)
-        {
-            ListView lv = lvi.ListView;
-
-            if (lv.Items.Count > 1)
-            {
-                int index = lvi.Index;
-
-                if (index == lv.Items.Count - 1)
-                {
-                    index = 0;
-                }
-                else
-                {
-                    index++;
-                }
-
-                lv.Items.Remove(lvi);
-                lv.Items.Insert(index, lvi);
-            }
-
-            lv.Focus();
-            lvi.EnsureVisible();
-            lvi.Selected = true;
-        }
-
         public static Bitmap CreateEmptyBitmap(this Image img, int widthOffset = 0, int heightOffset = 0, PixelFormat pixelFormat = PixelFormat.Format32bppArgb)
         {
             Bitmap bmp = new Bitmap(img.Width + widthOffset, img.Height + heightOffset, pixelFormat);
@@ -467,23 +323,12 @@ namespace ShareX.HelpersLib
             return source.Reverse().Take(count).Reverse();
         }
 
-        public static void Check(this ToolStripMenuItem tsmi)
+        public static Version Normalize(this Version version, bool ignoreRevision = false, bool ignoreBuild = false, bool ignoreMinor = false)
         {
-            if (tsmi != null)
-            {
-                foreach (ToolStripItem item in tsmi.GetCurrentParent().Items)
-                {
-                    if (item != null && item is ToolStripMenuItem tsmiItem && tsmiItem.Tag.Equals(tsmi.Tag))
-                    {
-                        tsmiItem.Checked = tsmiItem == tsmi;
-                    }
-                }
-            }
-        }
-
-        public static Version Normalize(this Version version)
-        {
-            return new Version(Math.Max(version.Major, 0), Math.Max(version.Minor, 0), Math.Max(version.Build, 0), Math.Max(version.Revision, 0));
+            return new Version(Math.Max(version.Major, 0),
+                ignoreMinor ? 0 : Math.Max(version.Minor, 0),
+                ignoreBuild ? 0 : Math.Max(version.Build, 0),
+                ignoreRevision ? 0 : Math.Max(version.Revision, 0));
         }
 
         public static void Move<T>(this List<T> list, int oldIndex, int newIndex)
@@ -491,63 +336,6 @@ namespace ShareX.HelpersLib
             T obj = list[oldIndex];
             list.RemoveAt(oldIndex);
             list.Insert(newIndex, obj);
-        }
-
-        public static void SetWatermark(this TextBox textBox, string watermarkText, bool showCueWhenFocus = false)
-        {
-            if (textBox != null && textBox.IsHandleCreated && watermarkText != null)
-            {
-                NativeMethods.SendMessage(textBox.Handle, (int)NativeConstants.EM_SETCUEBANNER, showCueWhenFocus ? 1 : 0, watermarkText);
-            }
-        }
-
-        public static void HideImageMargin(this ToolStripDropDownItem tsddi)
-        {
-            ((ToolStripDropDownMenu)tsddi.DropDown).ShowImageMargin = false;
-        }
-
-        public static void DisableMenuCloseOnClick(this ToolStripDropDownItem tsddi)
-        {
-            tsddi.DropDown.Closing -= DisableMenuCloseOnClick_DropDown_Closing;
-            tsddi.DropDown.Closing += DisableMenuCloseOnClick_DropDown_Closing;
-        }
-
-        private static void DisableMenuCloseOnClick_DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
-        {
-            e.Cancel = e.CloseReason == ToolStripDropDownCloseReason.ItemClicked;
-        }
-
-        public static void SetValue(this NumericUpDown nud, decimal number)
-        {
-            nud.Value = number.Clamp(nud.Minimum, nud.Maximum);
-        }
-
-        public static void SetValue(this TrackBar tb, int number)
-        {
-            tb.Value = number.Clamp(tb.Minimum, tb.Maximum);
-        }
-
-        public static bool IsValidImage(this PictureBox pb)
-        {
-            return pb.Image != null && pb.Image != pb.InitialImage && pb.Image != pb.ErrorImage;
-        }
-
-        public static void IgnoreSeparatorClick(this ContextMenuStrip cms)
-        {
-            bool cancelClose = false;
-
-            cms.ItemClicked += (sender, e) =>
-            {
-                cancelClose = e.ClickedItem is ToolStripSeparator;
-            };
-
-            cms.Closing += (sender, e) =>
-            {
-                if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked && cancelClose)
-                {
-                    e.Cancel = true;
-                }
-            };
         }
 
         public static Rectangle Combine(this IEnumerable<Rectangle> rects)
@@ -569,20 +357,39 @@ namespace ShareX.HelpersLib
             return result;
         }
 
-        public static Rectangle AddPoint(this Rectangle rect, Point point)
+        public static RectangleF Combine(this IEnumerable<RectangleF> rects)
         {
-            return Rectangle.Union(rect, new Rectangle(point, new Size(1, 1)));
-        }
+            RectangleF result = RectangleF.Empty;
 
-        public static Rectangle CreateRectangle(this IEnumerable<Point> points)
-        {
-            Rectangle result = Rectangle.Empty;
-
-            foreach (Point point in points)
+            foreach (RectangleF rect in rects)
             {
                 if (result.IsEmpty)
                 {
-                    result = new Rectangle(point, new Size(1, 1));
+                    result = rect;
+                }
+                else
+                {
+                    result = RectangleF.Union(result, rect);
+                }
+            }
+
+            return result;
+        }
+
+        public static RectangleF AddPoint(this RectangleF rect, PointF point)
+        {
+            return RectangleF.Union(rect, new RectangleF(point, new SizeF(1, 1)));
+        }
+
+        public static RectangleF CreateRectangle(this IEnumerable<PointF> points)
+        {
+            RectangleF result = Rectangle.Empty;
+
+            foreach (PointF point in points)
+            {
+                if (result.IsEmpty)
+                {
+                    result = new RectangleF(point, new Size(1, 1));
                 }
                 else
                 {
@@ -598,61 +405,28 @@ namespace ShareX.HelpersLib
             return new Point(rect.X + (rect.Width / 2), rect.Y + (rect.Height / 2));
         }
 
-        public static int Area(this Rectangle rect)
+        public static PointF Center(this RectangleF rect)
+        {
+            return new PointF(rect.X + (rect.Width / 2), rect.Y + (rect.Height / 2));
+        }
+
+        public static float Area(this RectangleF rect)
         {
             return rect.Width * rect.Height;
         }
 
-        public static int Perimeter(this Rectangle rect)
+        public static float Perimeter(this RectangleF rect)
         {
             return 2 * (rect.Width + rect.Height);
         }
 
-        public static Point Restrict(this Point point, Rectangle rect)
+        public static PointF Restrict(this PointF point, RectangleF rect)
         {
             point.X = Math.Max(point.X, rect.X);
             point.Y = Math.Max(point.Y, rect.Y);
             point.X = Math.Min(point.X, rect.X + rect.Width - 1);
             point.Y = Math.Min(point.Y, rect.Y + rect.Height - 1);
             return point;
-        }
-
-        public static void RefreshItems(this ComboBox cb)
-        {
-            typeof(ComboBox).InvokeMember("RefreshItems", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, cb, new object[] { });
-        }
-
-        public static void AutoSizeDropDown(this ComboBox cb)
-        {
-            int maxWidth = 0;
-            int verticalScrollBarWidth = cb.Items.Count > cb.MaxDropDownItems ? SystemInformation.VerticalScrollBarWidth : 0;
-            foreach (object item in cb.Items)
-            {
-                int tempWidth = TextRenderer.MeasureText(cb.GetItemText(item), cb.Font).Width + verticalScrollBarWidth;
-                if (tempWidth > maxWidth)
-                {
-                    maxWidth = tempWidth;
-                }
-            }
-            cb.DropDownWidth = maxWidth;
-        }
-
-        public static void RefreshItem(this ListBox lb, int index)
-        {
-            typeof(ListBox).InvokeMember("RefreshItem", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, lb, new object[] { index });
-        }
-
-        public static void RefreshSelectedItem(this ListBox lb)
-        {
-            if (lb.SelectedIndex > -1)
-            {
-                lb.RefreshItem(lb.SelectedIndex);
-            }
-        }
-
-        public static void RefreshItems(this ListBox lb)
-        {
-            typeof(ListBox).InvokeMember("RefreshItems", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, lb, new object[] { });
         }
 
         public static void ShowError(this Exception e, bool fullError = true)
@@ -665,73 +439,6 @@ namespace ShareX.HelpersLib
         {
             TaskScheduler scheduler = TaskScheduler.FromCurrentSynchronizationContext();
             return task.ContinueWith(t => action(), scheduler);
-        }
-
-        public static void DoubleBuffered(this DataGridView dgv, bool value)
-        {
-            PropertyInfo pi = dgv.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
-            pi.SetValue(dgv, value, null);
-        }
-
-        public static void AppendLine(this RichTextBox rtb, string value = "")
-        {
-            rtb.AppendText(value + Environment.NewLine);
-        }
-
-        public static void SetFontRegular(this RichTextBox rtb)
-        {
-            rtb.SelectionFont = new Font(rtb.Font, FontStyle.Regular);
-        }
-
-        public static void SetFontBold(this RichTextBox rtb)
-        {
-            rtb.SelectionFont = new Font(rtb.Font, FontStyle.Bold);
-        }
-
-        public static void SupportCustomTheme(this ListView lv)
-        {
-            if (!lv.OwnerDraw)
-            {
-                lv.OwnerDraw = true;
-
-                lv.DrawItem += (sender, e) =>
-                {
-                    e.DrawDefault = true;
-                };
-
-                lv.DrawSubItem += (sender, e) =>
-                {
-                    e.DrawDefault = true;
-                };
-
-                lv.DrawColumnHeader += (sender, e) =>
-                {
-                    if (ShareXResources.UseCustomTheme)
-                    {
-                        using (Brush brush = new SolidBrush(ShareXResources.Theme.BackgroundColor))
-                        {
-                            e.Graphics.FillRectangle(brush, e.Bounds);
-                        }
-
-                        TextRenderer.DrawText(e.Graphics, e.Header.Text, e.Font, e.Bounds.LocationOffset(2, 0).SizeOffset(-4, 0), ShareXResources.Theme.TextColor,
-                            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
-
-                        if (e.Bounds.Right < lv.ClientRectangle.Right)
-                        {
-                            using (Pen pen = new Pen(ShareXResources.Theme.SeparatorDarkColor))
-                            using (Pen pen2 = new Pen(ShareXResources.Theme.SeparatorLightColor))
-                            {
-                                e.Graphics.DrawLine(pen, e.Bounds.Right - 2, e.Bounds.Top, e.Bounds.Right - 2, e.Bounds.Bottom - 1);
-                                e.Graphics.DrawLine(pen2, e.Bounds.Right - 1, e.Bounds.Top, e.Bounds.Right - 1, e.Bounds.Bottom - 1);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        e.DrawDefault = true;
-                    }
-                };
-            }
         }
 
         public static List<T> Range<T>(this List<T> source, int start, int end)
@@ -782,19 +489,6 @@ namespace ShareX.HelpersLib
             }
 
             return null;
-        }
-
-        public static IEnumerable<TreeNode> All(this TreeNodeCollection nodes)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                yield return node;
-
-                foreach (TreeNode child in node.Nodes.All())
-                {
-                    yield return child;
-                }
-            }
         }
 
         public static bool IsTransparent(this Color color)

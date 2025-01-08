@@ -116,6 +116,11 @@
             // nudTextSize
             // 
             resources.ApplyResources(this.nudTextSize, "nudTextSize");
+            this.nudTextSize.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
             this.nudTextSize.Minimum = new decimal(new int[] {
             5,
             0,
@@ -133,6 +138,7 @@
             // 
             resources.ApplyResources(this.btnTextColor, "btnTextColor");
             this.btnTextColor.Color = System.Drawing.Color.Empty;
+            this.btnTextColor.ColorPickerOptions = null;
             this.btnTextColor.Name = "btnTextColor";
             this.ttTextInput.SetToolTip(this.btnTextColor, resources.GetString("btnTextColor.ToolTip"));
             this.btnTextColor.UseVisualStyleBackColor = true;
@@ -267,7 +273,6 @@
             // btnCancel
             // 
             resources.ApplyResources(this.btnCancel, "btnCancel");
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -340,8 +345,8 @@
             // 
             // btnSwapEnterKey
             // 
-            this.btnSwapEnterKey.Image = global::ShareX.ScreenCaptureLib.Properties.Resources.keyboard_enter;
             resources.ApplyResources(this.btnSwapEnterKey, "btnSwapEnterKey");
+            this.btnSwapEnterKey.Image = global::ShareX.ScreenCaptureLib.Properties.Resources.keyboard_enter;
             this.btnSwapEnterKey.Name = "btnSwapEnterKey";
             this.btnSwapEnterKey.UseVisualStyleBackColor = true;
             this.btnSwapEnterKey.Click += new System.EventHandler(this.btnSwapEnterKey_Click);
@@ -351,7 +356,6 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.CancelButton = this.btnCancel;
             this.Controls.Add(this.btnSwapEnterKey);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.lblTip);

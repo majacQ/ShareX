@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -63,20 +63,13 @@ namespace ShareX.HelpersLib
             }
         }
 
-        public static void RemoveRegistry(string path, bool recursive = false, RegistryHive root = RegistryHive.CurrentUser)
+        public static void RemoveRegistry(string path, RegistryHive root = RegistryHive.CurrentUser)
         {
             if (!string.IsNullOrEmpty(path))
             {
                 using (RegistryKey rk = RegistryKey.OpenBaseKey(root, RegistryView.Default))
                 {
-                    if (recursive)
-                    {
-                        rk.DeleteSubKeyTree(path, false);
-                    }
-                    else
-                    {
-                        rk.DeleteSubKey(path, false);
-                    }
+                    rk.DeleteSubKeyTree(path, false);
                 }
             }
         }
@@ -107,9 +100,9 @@ namespace ShareX.HelpersLib
             return GetValue(path, name, root, view) as string;
         }
 
-        public static int GetValueDWord(string path, string name = null, RegistryHive root = RegistryHive.CurrentUser, RegistryView view = RegistryView.Default)
+        public static int? GetValueDWord(string path, string name = null, RegistryHive root = RegistryHive.CurrentUser, RegistryView view = RegistryView.Default)
         {
-            return (int)GetValue(path, name, root, view);
+            return (int?)GetValue(path, name, root, view);
         }
 
         public static bool CheckStringValue(string path, string name = null, string value = null, RegistryHive root = RegistryHive.CurrentUser, RegistryView view = RegistryView.Default)
@@ -121,7 +114,7 @@ namespace ShareX.HelpersLib
 
         public static string SearchProgramPath(string fileName)
         {
-            // First method: HKEY_CLASSES_ROOT\Applications\{filename}\shell\{command}\command
+            // First method: HKEY_CLASSES_ROOT\Applications\{fileName}\shell\{command}\command
 
             string[] commands = new string[] { "open", "edit" };
 

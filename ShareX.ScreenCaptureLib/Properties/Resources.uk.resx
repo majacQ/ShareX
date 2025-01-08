@@ -180,9 +180,6 @@
   <data name="WebpageCaptureForm_UpdateControls_Capture" xml:space="preserve">
     <value>Захопити</value>
   </data>
-  <data name="FFmpegOptionsForm_UpdateUI_Quality_" xml:space="preserve">
-    <value>Якість:</value>
-  </data>
   <data name="ShapeManager_CursorType" xml:space="preserve">
     <value>Тип курсора:</value>
   </data>
@@ -191,9 +188,6 @@
   </data>
   <data name="ShapeManager_CreateToolbar_DropShadow" xml:space="preserve">
     <value>Тінь</value>
-  </data>
-  <data name="FFmpegOptionsForm_UpdateUI_Bitrate___0_k" xml:space="preserve">
-    <value>Швидкотік: {0}к</value>
   </data>
   <data name="ShapeManager_CreateContextMenu_Capture_fullscreen" xml:space="preserve">
     <value>Захоплення всього екрану</value>
@@ -219,18 +213,11 @@
   <data name="ShapeManager_CreateToolbar_CanvasSize" xml:space="preserve">
     <value>Розмір полотна...</value>
   </data>
-  <data name="FFmpegOptionsForm_DownloaderForm_InstallRequested_Successfully_downloaded_FFmpeg_" xml:space="preserve">
-    <value>FFmpeg вдало завантажено.</value>
-  </data>
   <data name="ShapeManager_CreateToolbar_FlipVertical" xml:space="preserve">
     <value>Віддзеркалити по вертикалі</value>
   </data>
   <data name="ShapeManager_CreateToolbar_AutoCropImage" xml:space="preserve">
     <value>Автообрізання...</value>
-  </data>
-  <data name="RegionCaptureForm_ShowExitConfirmation_Text" xml:space="preserve">
-    <value>Є незбережені зміни.
-Хочете закрити редактор зображень?</value>
   </data>
   <data name="ShapeManager_CreateToolbar_BringToFront" xml:space="preserve">
     <value>На передній план</value>
@@ -267,9 +254,6 @@
   </data>
   <data name="RectangleTransparent_RectangleTransparent_Rectangle_capture_transparent" xml:space="preserve">
     <value>Прозоре прямокутне захоплення</value>
-  </data>
-  <data name="FFmpegOptionsForm_DownloaderForm_InstallRequested_Download_of_FFmpeg_failed_" xml:space="preserve">
-    <value>Збій завантаження FFmpeg.</value>
   </data>
   <data name="ShapeManager_CreateContextMenu_Show_position_and_size_info" xml:space="preserve">
     <value>Показувати інформацію про положення та розмір</value>

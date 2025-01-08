@@ -363,21 +363,6 @@
   <data name="tsmiClearList.Text" xml:space="preserve">
     <value>Liste leeren</value>
   </data>
-  <data name="tsmiHideMenu.Text" xml:space="preserve">
-    <value>Menü ausblenden</value>
-  </data>
-  <data name="tsmiImagePreviewShow.Text" xml:space="preserve">
-    <value>Anzeigen</value>
-  </data>
-  <data name="tsmiImagePreviewHide.Text" xml:space="preserve">
-    <value>Ausblenden</value>
-  </data>
-  <data name="tsmiImagePreviewAutomatic.Text" xml:space="preserve">
-    <value>Automatisch</value>
-  </data>
-  <data name="tsmiImagePreview.Text" xml:space="preserve">
-    <value>Bildvorschau</value>
-  </data>
   <data name="tsmiTrayFullscreen.Text" xml:space="preserve">
     <value>Vollbild</value>
   </data>
@@ -495,12 +480,6 @@
   <data name="tsmiTrayImageHistory.Text" xml:space="preserve">
     <value>Bilderchronik...</value>
   </data>
-  <data name="tsmiTrayDonate.Text" xml:space="preserve">
-    <value>Spenden...</value>
-  </data>
-  <data name="tsmiTrayAbout.Text" xml:space="preserve">
-    <value>Über...</value>
-  </data>
   <data name="tsmiTrayShow.Text" xml:space="preserve">
     <value>Hauptfenster öffnen</value>
   </data>
@@ -588,30 +567,6 @@
   <data name="tsmiVideoThumbnailer.Text" xml:space="preserve">
     <value>Video-Thumbnailer...</value>
   </data>
-  <data name="tsmiTrayDebug.Text" xml:space="preserve">
-    <value>Debug</value>
-  </data>
-  <data name="tsmiTrayTestURLSharing.Text" xml:space="preserve">
-    <value>URL-Teilen testen</value>
-  </data>
-  <data name="tsmiTrayTestURLShortener.Text" xml:space="preserve">
-    <value>URL-Kürzen testen</value>
-  </data>
-  <data name="tsmiTrayTestFileUpload.Text" xml:space="preserve">
-    <value>Dateiupload testen</value>
-  </data>
-  <data name="tsmiTrayTestTextUpload.Text" xml:space="preserve">
-    <value>Textupload testen</value>
-  </data>
-  <data name="tsmiTrayTestImageUpload.Text" xml:space="preserve">
-    <value>Bildupload testen</value>
-  </data>
-  <data name="tsmiTrayShowDebugLog.Text" xml:space="preserve">
-    <value>Debugprotokoll...</value>
-  </data>
-  <data name="tsmiHideColumns.Text" xml:space="preserve">
-    <value>Spalten ausblenden</value>
-  </data>
   <data name="tsbAbout.Text" xml:space="preserve">
     <value>Über...</value>
   </data>
@@ -681,12 +636,6 @@
   <data name="tsmiOCRImage.Text" xml:space="preserve">
     <value>Texterkennung (OCR)...</value>
   </data>
-  <data name="tsmiTextCapture.Text" xml:space="preserve">
-    <value>Texterkennung (OCR)...</value>
-  </data>
-  <data name="tsmiTrayTextCapture.Text" xml:space="preserve">
-    <value>Texterkennung (OCR)...</value>
-  </data>
   <data name="tsmiTrayImageEditor.Text" xml:space="preserve">
     <value>Bildeditor...</value>
   </data>
@@ -710,12 +659,6 @@
   </data>
   <data name="tsmiCombineImages.Text" xml:space="preserve">
     <value>Bilder zusammenführen...</value>
-  </data>
-  <data name="tsmiImagePreviewSide.Text" xml:space="preserve">
-    <value>Seitlich</value>
-  </data>
-  <data name="tsmiImagePreviewBottom.Text" xml:space="preserve">
-    <value>Unten</value>
   </data>
   <data name="tsmiTrayImageThumbnailer.Text" xml:space="preserve">
     <value>Bild-Thumbnailer...</value>
@@ -775,7 +718,7 @@
     <value>Bildabmessungen</value>
   </data>
   <data name="tsbDiscord.Text" xml:space="preserve">
-    <value>Discord</value>
+    <value>Discord...</value>
   </data>
   <data name="tsbTwitter.Text" xml:space="preserve">
     <value>Twitter</value>
@@ -785,21 +728,6 @@
   </data>
   <data name="tsmiTrayImageSplitter.Text" xml:space="preserve">
     <value>Bildteiler...</value>
-  </data>
-  <data name="tsmiThumbnailTitle.Text" xml:space="preserve">
-    <value>Titel der Bildvorschau</value>
-  </data>
-  <data name="tsmiThumbnailTitleBottom.Text" xml:space="preserve">
-    <value>Unten</value>
-  </data>
-  <data name="tsmiThumbnailTitleTop.Text" xml:space="preserve">
-    <value>Oben</value>
-  </data>
-  <data name="tsmiThumbnailTitleHide.Text" xml:space="preserve">
-    <value>Ausblenden</value>
-  </data>
-  <data name="tsmiThumbnailTitleShow.Text" xml:space="preserve">
-    <value>Anzeigen</value>
   </data>
   <data name="tsmiRunAction.Text" xml:space="preserve">
     <value>Aktion ausführen</value>
@@ -815,5 +743,77 @@
   </data>
   <data name="tsmiVideoConverter.Text" xml:space="preserve">
     <value>Videokonverter...</value>
+  </data>
+  <data name="tsmiCombineImagesVertically.Text" xml:space="preserve">
+    <value>Vertikal kombinieren</value>
+  </data>
+  <data name="tsmiCombineImagesHorizontally.Text" xml:space="preserve">
+    <value>Horizontal kombinieren</value>
+  </data>
+  <data name="tsmiPinSelectedFile.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Strg + P</value>
+  </data>
+  <data name="tsmiPinSelectedFile.Text" xml:space="preserve">
+    <value>An Bildschirm anheften</value>
+  </data>
+  <data name="tsmiBingVisualSearch.Text" xml:space="preserve">
+    <value>Visuelle Bing-Suche...</value>
+  </data>
+  <data name="tsmiBeautifyImage.Text" xml:space="preserve">
+    <value>Bild verschönern...</value>
+  </data>
+  <data name="tsmiRestartAsAdmin.Text" xml:space="preserve">
+    <value>ShareX als Admin neustarten</value>
+  </data>
+  <data name="cDescription.HeaderText" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="tsmiTrayPinToScreen.Text" xml:space="preserve">
+    <value>An Bildschirm anheften...</value>
+  </data>
+  <data name="tsmiTrayImageBeautifier.Text" xml:space="preserve">
+    <value>Bildverschönerung...</value>
+  </data>
+  <data name="tsmiTrayImageViewer.Text" xml:space="preserve">
+    <value>Bildanzeige...</value>
+  </data>
+  <data name="tsmiTrayHashChecker.Text" xml:space="preserve">
+    <value>Hash-Überprüfung...</value>
+  </data>
+  <data name="tsmiTrayClipboardViewer.Text" xml:space="preserve">
+    <value>Zwischenablage-Viewer...</value>
+  </data>
+  <data name="tsmiTrayBorderlessWindow.Text" xml:space="preserve">
+    <value>Randloses Fenster...</value>
+  </data>
+  <data name="tsmiTrayInspectWindow.Text" xml:space="preserve">
+    <value>Fenster überprüfen...</value>
+  </data>
+  <data name="tsmiPinToScreen.Text" xml:space="preserve">
+    <value>An Bildschirm anheften...</value>
+  </data>
+  <data name="tsmiImageBeautifier.Text" xml:space="preserve">
+    <value>Bildverschönerung...</value>
+  </data>
+  <data name="tsmiImageViewer.Text" xml:space="preserve">
+    <value>Bildanzeige...</value>
+  </data>
+  <data name="tsmiHashChecker.Text" xml:space="preserve">
+    <value>Hash-Überprüfung...</value>
+  </data>
+  <data name="tsmiClipboardViewer.Text" xml:space="preserve">
+    <value>Zwischenanlage-Viewer...</value>
+  </data>
+  <data name="tsmiBorderlessWindow.Text" xml:space="preserve">
+    <value>Randloses Fenster...</value>
+  </data>
+  <data name="tsmiInspectWindow.Text" xml:space="preserve">
+    <value>Fenster überprüfen...</value>
+  </data>
+  <data name="tsbX.Text" xml:space="preserve">
+    <value>Folge @ShareX...</value>
+  </data>
+  <data name="cHotkey.HeaderText" xml:space="preserve">
+    <value>Tastenkürzel</value>
   </data>
 </root>

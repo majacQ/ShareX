@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -354,7 +354,7 @@ namespace ShareX.HelpersLib
             return null;
         }
 
-        private static Bitmap GetImageAlternative2()
+        public static Bitmap GetImageAlternative2()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
 
@@ -473,6 +473,30 @@ namespace ShareX.HelpersLib
             catch (Exception e)
             {
                 DebugHelper.WriteException(e, "Clipboard get file drop list failed.");
+            }
+
+            return null;
+        }
+
+        public static Bitmap TryGetImage()
+        {
+            if (ContainsImage())
+            {
+                return GetImage();
+            }
+            else if (ContainsFileDropList())
+            {
+                string[] files = GetFileDropList();
+
+                if (files != null)
+                {
+                    string imageFilePath = files.FirstOrDefault(x => FileHelpers.IsImageFile(x));
+
+                    if (!string.IsNullOrEmpty(imageFilePath))
+                    {
+                        return ImageHelpers.LoadImage(imageFilePath);
+                    }
+                }
             }
 
             return null;

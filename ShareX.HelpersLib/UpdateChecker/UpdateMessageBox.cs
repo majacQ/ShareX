@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -30,19 +30,20 @@ using System.Windows.Forms;
 
 namespace ShareX.HelpersLib
 {
-    public partial class UpdateMessageBox : BlackStyleForm
+    public partial class UpdateMessageBox : Form
     {
         public static bool IsOpen { get; private set; }
-        public static bool DontShow { get; private set; }
 
         public bool ActivateWindow { get; private set; }
 
         protected override bool ShowWithoutActivation => !ActivateWindow;
 
-        public UpdateMessageBox(bool activateWindow, UpdateChecker updateChecker)
+        public UpdateMessageBox(UpdateChecker updateChecker, bool activateWindow = true)
         {
             ActivateWindow = activateWindow;
+
             InitializeComponent();
+            ShareXResources.ApplyTheme(this);
 
             if (!ActivateWindow)
             {
@@ -67,14 +68,16 @@ namespace ShareX.HelpersLib
             sbText.Append(Resources.UpdateMessageBox_UpdateMessageBox_CurrentVersion);
             sbText.Append(": ");
             sbText.Append(updateChecker.CurrentVersion);
-            if (updateChecker.IsBeta) sbText.Append(" Beta");
             sbText.AppendLine();
             sbText.Append(Resources.UpdateMessageBox_UpdateMessageBox_LatestVersion);
             sbText.Append(": ");
             sbText.Append(updateChecker.LatestVersion);
+            if (updateChecker.IsDev) sbText.Append(" Dev");
             if (updateChecker is GitHubUpdateChecker githubUpdateChecker && githubUpdateChecker.IsPreRelease) sbText.Append(" (Pre-release)");
 
             lblText.Text = sbText.ToString();
+
+            lblViewChangelog.Visible = !updateChecker.IsDev;
         }
 
         public static DialogResult Start(UpdateChecker updateChecker, bool activateWindow = true)
@@ -87,7 +90,7 @@ namespace ShareX.HelpersLib
 
                 try
                 {
-                    using (UpdateMessageBox messageBox = new UpdateMessageBox(activateWindow, updateChecker))
+                    using (UpdateMessageBox messageBox = new UpdateMessageBox(updateChecker, activateWindow))
                     {
                         result = messageBox.ShowDialog();
                     }
@@ -114,14 +117,17 @@ namespace ShareX.HelpersLib
             }
         }
 
-        private void lblViewChangelog_Click(object sender, EventArgs e)
+        private void UpdateMessageBox_FormClosing(object sender, FormClosingEventArgs e)
         {
-            URLHelpers.OpenURL(Links.URL_CHANGELOG);
+            if (DialogResult == DialogResult.Cancel && e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult = DialogResult.No;
+            }
         }
 
-        private void cbDontShow_CheckedChanged(object sender, EventArgs e)
+        private void lblViewChangelog_Click(object sender, EventArgs e)
         {
-            DontShow = cbDontShow.Checked;
+            URLHelpers.OpenURL(Links.Changelog);
         }
 
         private void btnYes_MouseClick(object sender, MouseEventArgs e)

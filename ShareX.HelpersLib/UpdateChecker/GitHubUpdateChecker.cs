@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -26,9 +26,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Cache;
+using System.Threading.Tasks;
 
 namespace ShareX.HelpersLib
 {
@@ -42,6 +40,7 @@ namespace ShareX.HelpersLib
         private const string APIURL = "https://api.github.com";
 
         private string ReleasesURL => $"{APIURL}/repos/{Owner}/{Repo}/releases";
+        private string LatestReleaseURL => $"{ReleasesURL}/latest";
 
         public GitHubUpdateChecker(string owner, string repo)
         {
@@ -49,11 +48,11 @@ namespace ShareX.HelpersLib
             Repo = repo;
         }
 
-        public override void CheckUpdate()
+        public override async Task CheckUpdateAsync()
         {
             try
             {
-                GitHubRelease latestRelease = GetLatestRelease(IncludePreRelease);
+                GitHubRelease latestRelease = await GetLatestRelease(IncludePreRelease);
 
                 if (UpdateReleaseInfo(latestRelease, IsPortable, IsPortable))
                 {
@@ -63,17 +62,17 @@ namespace ShareX.HelpersLib
             }
             catch (Exception e)
             {
-                DebugHelper.WriteException(e, "GitHub update check failed");
+                DebugHelper.WriteException(e, "GitHub update check failed.");
             }
 
             Status = UpdateStatus.UpdateCheckFailed;
         }
 
-        public virtual string GetLatestDownloadURL(bool isBrowserDownloadURL)
+        public virtual async Task<string> GetLatestDownloadURL(bool isBrowserDownloadURL)
         {
             try
             {
-                GitHubRelease latestRelease = GetLatestRelease(IncludePreRelease);
+                GitHubRelease latestRelease = await GetLatestRelease(IncludePreRelease);
 
                 if (UpdateReleaseInfo(latestRelease, IsPortable, isBrowserDownloadURL))
                 {
@@ -88,41 +87,55 @@ namespace ShareX.HelpersLib
             return null;
         }
 
-        protected List<GitHubRelease> GetReleases()
+        protected async Task<List<GitHubRelease>> GetReleases()
         {
-            using (WebClient wc = new WebClient())
+            List<GitHubRelease> releases = null;
+
+            string response = await WebHelpers.DownloadStringAsync(ReleasesURL);
+
+            if (!string.IsNullOrEmpty(response))
             {
-                wc.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-                wc.Headers.Add(HttpRequestHeader.UserAgent, ShareXResources.UserAgent);
-                wc.Proxy = Proxy;
+                releases = JsonConvert.DeserializeObject<List<GitHubRelease>>(response);
 
-                string response = wc.DownloadString(ReleasesURL);
-
-                if (!string.IsNullOrEmpty(response))
+                if (releases != null && releases.Count > 0)
                 {
-                    return JsonConvert.DeserializeObject<List<GitHubRelease>>(response);
+                    releases.Sort((x, y) => y.published_at.CompareTo(x.published_at));
                 }
             }
 
-            return null;
+            return releases;
         }
 
-        protected GitHubRelease GetLatestRelease(bool includePreRelease)
+        protected async Task<GitHubRelease> GetLatestRelease()
         {
             GitHubRelease latestRelease = null;
 
-            List<GitHubRelease> releases = GetReleases();
+            string response = await WebHelpers.DownloadStringAsync(LatestReleaseURL);
 
-            if (releases != null && releases.Count > 0)
+            if (!string.IsNullOrEmpty(response))
             {
-                if (includePreRelease)
+                latestRelease = JsonConvert.DeserializeObject<GitHubRelease>(response);
+            }
+
+            return latestRelease;
+        }
+
+        protected async Task<GitHubRelease> GetLatestRelease(bool includePreRelease)
+        {
+            GitHubRelease latestRelease = null;
+
+            if (includePreRelease)
+            {
+                List<GitHubRelease> releases = await GetReleases();
+
+                if (releases != null && releases.Count > 0)
                 {
                     latestRelease = releases[0];
                 }
-                else
-                {
-                    latestRelease = releases.FirstOrDefault(x => !x.prerelease);
-                }
+            }
+            else
+            {
+                latestRelease = await GetLatestRelease();
             }
 
             return latestRelease;
@@ -134,7 +147,7 @@ namespace ShareX.HelpersLib
             {
                 LatestVersion = new Version(release.tag_name.Substring(1));
 
-                if (release.assets != null && release.assets.Count > 0)
+                if (release.assets != null && release.assets.Length > 0)
                 {
                     string endsWith;
 
@@ -151,7 +164,7 @@ namespace ShareX.HelpersLib
                     {
                         if (asset != null && !string.IsNullOrEmpty(asset.name) && asset.name.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
                         {
-                            Filename = asset.name;
+                            FileName = asset.name;
 
                             if (isBrowserDownloadURL)
                             {
@@ -179,32 +192,37 @@ namespace ShareX.HelpersLib
             public string assets_url { get; set; }
             public string upload_url { get; set; }
             public string html_url { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
+            //public GitHubAuthor author { get; set; }
+            public string node_id { get; set; }
             public string tag_name { get; set; }
             public string target_commitish { get; set; }
             public string name { get; set; }
-            public string body { get; set; }
             public bool draft { get; set; }
             public bool prerelease { get; set; }
-            public string created_at { get; set; }
-            public string published_at { get; set; }
-            public List<GitHubAsset> assets { get; set; }
+            public DateTime created_at { get; set; }
+            public DateTime published_at { get; set; }
+            public GitHubAsset[] assets { get; set; }
             public string tarball_url { get; set; }
             public string zipball_url { get; set; }
+            public string body { get; set; }
+            //public GitHubReactions reactions { get; set; }
         }
 
         protected class GitHubAsset
         {
             public string url { get; set; }
-            public int id { get; set; }
+            public long id { get; set; }
+            public string node_id { get; set; }
             public string name { get; set; }
             public string label { get; set; }
+            //public GitHubUploader uploader { get; set; }
             public string content_type { get; set; }
             public string state { get; set; }
-            public int size { get; set; }
-            public int download_count { get; set; }
-            public string created_at { get; set; }
-            public string updated_at { get; set; }
+            public long size { get; set; }
+            public long download_count { get; set; }
+            public DateTime created_at { get; set; }
+            public DateTime updated_at { get; set; }
             public string browser_download_url { get; set; }
         }
     }

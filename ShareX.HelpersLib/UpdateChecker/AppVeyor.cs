@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -24,8 +24,7 @@
 #endregion License Information (GPL v3)
 
 using Newtonsoft.Json;
-using System.Net;
-using System.Net.Cache;
+using System.Threading.Tasks;
 
 namespace ShareX.HelpersLib
 {
@@ -33,47 +32,30 @@ namespace ShareX.HelpersLib
     {
         public string AccountName { get; set; }
         public string ProjectSlug { get; set; }
-        public IWebProxy Proxy { get; set; }
 
         private const string APIURL = "https://ci.appveyor.com/api";
 
-        public AppVeyorProject GetProjectByBranch(string branch = "master")
+        public async Task<AppVeyorProject> GetProjectByBranch(string branch = "master")
         {
             string url = $"{APIURL}/projects/{AccountName}/{ProjectSlug}/branch/{branch}";
+            string response = await WebHelpers.DownloadStringAsync(url);
 
-            using (WebClient wc = new WebClient())
+            if (!string.IsNullOrEmpty(response))
             {
-                wc.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-                wc.Headers.Add(HttpRequestHeader.UserAgent, ShareXResources.UserAgent);
-                wc.Proxy = Proxy;
-
-                string response = wc.DownloadString(url);
-
-                if (!string.IsNullOrEmpty(response))
-                {
-                    return JsonConvert.DeserializeObject<AppVeyorProject>(response);
-                }
+                return JsonConvert.DeserializeObject<AppVeyorProject>(response);
             }
 
             return null;
         }
 
-        public AppVeyorProjectArtifact[] GetArtifacts(string jobId)
+        public async Task<AppVeyorProjectArtifact[]> GetArtifacts(string jobId)
         {
             string url = $"{APIURL}/buildjobs/{jobId}/artifacts";
+            string response = await WebHelpers.DownloadStringAsync(url);
 
-            using (WebClient wc = new WebClient())
+            if (!string.IsNullOrEmpty(response))
             {
-                wc.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-                wc.Headers.Add(HttpRequestHeader.UserAgent, ShareXResources.UserAgent);
-                wc.Proxy = Proxy;
-
-                string response = wc.DownloadString(url);
-
-                if (!string.IsNullOrEmpty(response))
-                {
-                    return JsonConvert.DeserializeObject<AppVeyorProjectArtifact[]>(response);
-                }
+                return JsonConvert.DeserializeObject<AppVeyorProjectArtifact[]>(response);
             }
 
             return null;

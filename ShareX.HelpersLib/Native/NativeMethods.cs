@@ -2,7 +2,7 @@
 
 /*
     ShareX - A program that allows you to take screenshots and share any file type
-    Copyright (c) 2007-2021 ShareX Team
+    Copyright (c) 2007-2025 ShareX Team
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -74,6 +74,12 @@ namespace ShareX.HelpersLib
         public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
         [DllImport("user32.dll")]
+        public static extern bool GetLayeredWindowAttributes(IntPtr hwnd, out uint crKey, out byte bAlpha, out uint dwFlags);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
+        [DllImport("user32.dll")]
         public static extern bool ClientToScreen(IntPtr hWnd, ref Point lpPoint);
 
         [DllImport("user32.dll")]
@@ -131,6 +137,9 @@ namespace ShareX.HelpersLib
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
         public static extern short GetKeyState(int keyCode);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern IntPtr GetParent(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -429,7 +438,7 @@ namespace ShareX.HelpersLib
         public static extern void DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
 
         [DllImport("dwmapi.dll", PreserveSig = false)]
-        public static extern void DwmEnableComposition(CompositionAction uCompositionAction);
+        public static extern void DwmEnableComposition(DWM_EC uCompositionAction);
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
@@ -457,7 +466,23 @@ namespace ShareX.HelpersLib
 
         #endregion dwmapi.dll
 
+        #region winmm.dll
+
+        [DllImport("winmm.dll", EntryPoint = "timeBeginPeriod")]
+        public static extern uint TimeBeginPeriod(uint uMilliseconds);
+
+        [DllImport("winmm.dll", EntryPoint = "timeEndPeriod")]
+        public static extern uint TimeEndPeriod(uint uMilliseconds);
+
+        [DllImport("winmm.dll", EntryPoint = "timeGetDevCaps")]
+        public static extern uint TimeGetDevCaps(ref TimeCaps timeCaps, uint sizeTimeCaps);
+
+        #endregion
+
         #region Other dll
+
+        [DllImport("msvcrt.dll")]
+        public static extern int memcmp(IntPtr b1, IntPtr b2, long count);
 
         /// <summary>
         /// Copy a block of memory.
@@ -690,6 +715,9 @@ namespace ShareX.HelpersLib
 
         [DllImport("dnsapi.dll")]
         public static extern uint DnsFlushResolverCache();
+
+        [DllImport("uxtheme.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+        public static extern int SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);
 
         #endregion Other dll
     }
